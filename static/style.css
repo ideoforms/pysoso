@@ -1,0 +1,185 @@
+body
+{
+	background: #fafafa;
+	color: #333;
+	font-family: "courier new", sans-serif;
+	font-size: 74%;
+	margin: 32px;
+	padding: 0;
+	font-family: georgia;
+}
+
+p, li
+{
+	line-height: 1.4em;
+}
+
+img
+{
+	border: none;
+}
+
+a
+{
+	text-decoration: none;
+	color: #b43;
+}
+a:hover
+{
+	color: #333;
+}
+
+h1, h2, h3
+{
+	font-family: "franklin gothic medium";
+	font-family: georgia;
+	text-transform: lowercase;
+	font-weight: normal;
+	margin: 0.0em 0 1em;
+}
+
+h1
+{
+	font-size: 300%;
+}
+h1 a
+{
+	color: #333;
+}
+h2
+{
+	font-size: 200%;
+}
+h3
+{
+	font-size: 150%;
+}
+
+hr
+{
+	margin: 2em 0em;
+	border: none;
+	border-top: 1px dotted #aaa;
+	border: none;
+}
+
+dt
+{
+	float: left;
+	clear: left;
+	width: 7em;
+	padding: 0.5em;
+	margin-top: 0.5ex;
+	text-align: right;
+	font-weight: normal;
+}
+
+dd
+{
+	margin-left: 1em;
+	padding: 0.5em;
+}
+
+#nav
+{
+	margin-top: -1.5em;
+	padding: 0 32px;
+}
+
+ul.nav
+{
+	list-style: none;
+	margin: 0px;
+	margin-bottom: 1.5em;
+	padding: 0px;
+}
+
+ul.nav li
+{
+}
+
+
+input, textarea
+{
+	font-family: inherit;
+}
+
+.bookmarks
+{
+	text-transform: lowercase;
+}
+
+.bookmarks ul
+{
+	margin: 0;
+	padding: 0;
+}
+
+.bookmarks li
+{
+	color: #888;
+	list-style: none;
+	margin: 0;
+	padding: 0 0px;
+}
+
+.bookmarks_active
+{
+	font-size: 120%;
+}
+
+.error
+{
+	border: 1px dotted #aaa;
+	padding: 1.5em;
+}
+
+.header
+{
+	position: absolute;
+	width: 200px;
+	padding: 24px;
+}
+
+.body
+{
+	background: #eee;
+	padding: 32px;
+	width: 500px;
+	-moz-border-radius: 1.5em;
+	margin-left: 220px;
+	margin-bottom: 32px;
+}
+
+.footer
+{
+	color: #888;
+}
+
+.bookmarks .tools
+{
+	visibility: hidden;
+	margin: 0 4px;
+}
+.bookmarks .visible
+{
+	visibility: visible !important;
+}
+.icon
+{
+	position: relative;
+	top: 1px;
+}
+.icon:hover
+{
+	background: #b32;
+}
+
+.controls a
+{
+	color: #888;
+}
+.controls a.active
+{
+	color: #b43;
+}

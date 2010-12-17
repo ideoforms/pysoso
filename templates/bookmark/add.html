@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Add Bookmark{% endblock %}
+{% block body %}
+	<h2>Add Bookmark</h2>
+	{% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
+	<form action="{{ url_for('bookmark_lookup') }}" method="post">
+		<dl>
+			<dt>URL:
+			<dd><input type="text" name="url" size="50" />
+		</dl>
+		<div class="submit"><input type="submit" value="Look up"></div>
+	</form>
+{% endblock %}
+

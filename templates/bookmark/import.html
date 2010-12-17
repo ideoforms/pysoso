@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block title %}Import Bookmarks{% endblock %}
+{% block body %}
+	<h2>Import Bookmarks</h2>
+	<p>
+	Import your existing bookmarks from an OPML file.
+	</p>
+	{% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
+	<form method="post" enctype="multipart/form-data">
+		<dl>
+			<dt>OPML file:
+			<dd><input type="file" name="file" size="50" />
+		</dl>
+		<div class="submit"><input type="submit" value="Import"></div>
+	</form>
+{% endblock %}
+

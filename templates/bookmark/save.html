@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block title %}Save Bookmark{% endblock %}
+{% block body %}
+
+<div class="body">
+	<h2>Save Bookmark</h2>
+	{% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
+	<form action="{{ url_for('bookmark_save') }}" method="post">
+		<dl>
+			<dt>Title:
+			<dd><input type="text" name="title" size="50" value="{{ feed_title }}">
+			<dt>Link URL:
+			<dd><input type="text" name="url" size="50" value="{{ feed_url }}">
+			<dt>Feed URL:
+			<dd><input type="text" name="rss" size="50" value="{{ feed_rss }}">
+		</dl>
+		<div class="submit"><input type="submit" value="Save"></div>
+	</form>
+</div>
+
+{% endblock %}
+

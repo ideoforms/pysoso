@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+	<title>{% block title %}welcome{% endblock %} | pysoso</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='pysoso.js') }}"></script>
+	
+</head>
+<body>
+<div class="page">
+	<div class="header">
+		<h1><a href="{{ url_for("home") }}">pysoso</a></h1>
+		<div id="nav">
+
+		{% if g.user %}
+		<p>
+		logged in as <strong>{{ g.user.username }}</strong>
+		</p>
+		<ul class="nav">
+			<li><a href="{{ url_for('home') }}">home</a></li>
+			<li><a href="{{ url_for('about') }}">about</a></li>
+			<li><a href="{{ url_for('logout') }}">sign out</a></li>
+		</ul>
+		{% else %}
+		<ul class="nav">
+			<li><a href="{{ url_for('about') }}">about</a></li>
+			<li><a href="{{ url_for('register') }}">sign up</a></li>
+			<li><a href="{{ url_for('login') }}">sign in</a></li>
+		</ul>
+		{% endif %}
+
+		</div>
+	</div>
+	{% with flashes = get_flashed_messages() %}
+		{% if flashes %}
+			<ul class="flashes">
+			{% for message in flashes %}
+				<li>{{ message }}
+			{% endfor %}
+			</ul>
+		{% endif %}
+	{% endwith %}
+	{% block body %}{% endblock %}
+
+	<hr />
+	<div class="footer">
+		<p>
+		</p>
+	</div>
+</div>
+</body>
+</html>

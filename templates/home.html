@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %}
+	My Bookmarks
+{% endblock %}
+{% block body %}
+
+<div class="body">
+	<div class="bookmarks">
+	<h2>Fresh</h2>
+	<ul class="bookmarks_active">
+	{% if bookmarks %}
+	{% for bookmark in bookmarks %}
+		{% include "bookmark/bookmark.html" %}
+	{% endfor %}
+	{% else %}
+		<li><i>sorry, no fresh bookmarks right now</i></li>
+	{% endif %}
+	</ul>
+	<hr />
+	<h3>Stale</h3>
+	<ul class="bookmarks_stale">
+	{% for bookmark in stale %}
+		{% include "bookmark/bookmark.html" %}
+	{% endfor %}
+	</ul>
+	</div>
+	<hr />
+	<div class="controls">
+		<a href="#" id="edit">edit bookmarks</a>
+	</div>
+
+</div>
+
+<div class="body">
+	<div class="bookmark_form">
+		<h3>Add a New Bookmark</h3>
+		{% include "bookmark/form.html" %}
+	</div>
+</div>
+
+{% endblock %}
