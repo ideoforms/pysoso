@@ -1,0 +1,26 @@
+body
+{
+	margin: 8px;
+	padding: 0;
+	font-size: 21pt;
+}
+
+
+.header
+{
+	position: static;
+	width: auto;
+}
+
+.nav li
+{
+	margin: 0;
+	display: inline;
+	margin-right: 2em;
+}
+
+.body
+{
+	margin: 0;
+	width: 100%;
+}
