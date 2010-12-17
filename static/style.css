@@ -1,12 +1,12 @@
 body
 {
 	background: #fafafa;
+	font-family: georgia, serif;
 	color: #333;
-	font-family: "courier new", sans-serif;
+
 	font-size: 74%;
 	margin: 32px;
 	padding: 0;
-	font-family: georgia;
 }
 
 p, li
@@ -48,7 +48,7 @@ h1 a
 }
 h2
 {
-	font-size: 200%;
+	font-size: 180%;
 }
 h3
 {
@@ -83,7 +83,7 @@ dd
 #nav
 {
 	margin-top: -1.5em;
-	padding: 0 32px;
+	padding: 0 0px;
 }
 
 ul.nav
@@ -91,7 +91,7 @@ ul.nav
 	list-style: none;
 	margin: 0px;
 	margin-bottom: 1.5em;
-	padding: 0px;
+	padding: 0px 32px;
 }
 
 ul.nav li
@@ -123,9 +123,13 @@ input, textarea
 	padding: 0 0px;
 }
 
-.bookmarks_active
+#bookmarks_active ul
 {
 	font-size: 120%;
+}
+#bookmarks_stale ul
+{
+	display: none;
 }
 
 .error
@@ -134,14 +138,20 @@ input, textarea
 	padding: 1.5em;
 }
 
+.subtitle
+{
+	margin-top: -1.5em;
+}
+
 .header
 {
 	position: absolute;
 	width: 200px;
 	padding: 24px;
+	top: 32px;
 }
 
-.body
+.body, .flash, .error
 {
 	background: #eee;
 	padding: 32px;
@@ -149,6 +159,13 @@ input, textarea
 	-moz-border-radius: 1.5em;
 	margin-left: 220px;
 	margin-bottom: 32px;
+}
+
+.flash, .error
+{
+	background: #fa4;
+	padding: 24px 32px;
+	margin-top: 64px;
 }
 
 .footer
@@ -183,3 +200,4 @@ input, textarea
 {
 	color: #b43;
 }
+

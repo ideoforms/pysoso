@@ -24,11 +24,28 @@ $(function()
 			$(this).addClass("active");
 			$("div.bookmarks .tools").addClass("visible");
 		}
+		return false;
+	});
+
+	$('#bookmarks_hide').bind('click', function () {
+		if ($(this).hasClass("active"))
+		{
+			$(this).removeClass("active");
+			$(this).text("show");
+			$("#bookmarks_stale ul").addClass("folded");
+		}
+		else
+		{
+			$(this).addClass("active");
+			$(this).text("hide");
+			$("#bookmarks_stale ul").removeClass("folded");
+		}
 	});
 
 	$('.bookmarks .delete').bind('click', function () {
 		$(this).parents("li").hide("slow");
 		$.getJSON($(this).attr("href"));
+		return false;
 	});
 
 	$('.bookmarks .bookmark').bind('click', function () {

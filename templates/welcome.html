@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}Welcome{% endblock %}
 {% block body %}
+
 <div class="body">
 	<h2>Welcome</h2>
 	{% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
@@ -12,7 +13,7 @@
 	</p>
 	<ul>
 		<li><a href="{{ url_for("bookmark_lookup") }}">add a bookmark</a></li>
-		<li><a href="{{ url_for("bookmarks_import") }}">import some existing bookmarks</a> (opml format)</li>
+		<li><a href="{{ url_for("bookmark_import") }}">import some existing bookmarks</a> (opml format)</li>
 	</ul>
 </div>
 {% endblock %}

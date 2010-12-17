@@ -1,8 +1,12 @@
 {% extends "layout.html" %}
 {% block title %}Add Bookmark{% endblock %}
 {% block body %}
+
+<div class="body">
 	<h2>Add Bookmark</h2>
-	{% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
+	<p>
+	Enter the address of a website that you would like to add to your bookmark list. Only websites which provide an RSS feed are supported.
+	</p>
 	<form action="{{ url_for('bookmark_lookup') }}" method="post">
 		<dl>
 			<dt>URL:
@@ -10,5 +14,7 @@
 		</dl>
 		<div class="submit"><input type="submit" value="Look up"></div>
 	</form>
+</div>
+
 {% endblock %}
 

@@ -15,6 +15,7 @@ from __future__ import with_statement
 import time
 
 import psutil
+import werkzeug
 
 from sqlite3 import dbapi2 as sqlite3
 from hashlib import md5
@@ -35,7 +36,9 @@ SECRET_KEY = 'development key'
 # create our little application :)
 app = Flask(__name__)
 app.config.from_object(__name__)
-app.config.from_envvar('MINITWIT_SETTINGS', silent=True)
+# app.url_map.converters['default'] = werkzeug.routing.PathConverter
+# app.url_map.converters['string'] = werkzeug.routing.PathConverter
+# app.url_map.converters['any'] = werkzeug.routing.PathConverter
 
 
 def connect_db():
@@ -49,7 +52,6 @@ def init_db():
         with app.open_resource('schema.sql') as f:
             db.cursor().executescript(f.read())
         db.commit()
-
 
 def query_db(query, args=(), one=False):
     """Queries the database and returns a list of dictionaries."""
@@ -106,6 +108,9 @@ def before_request():
         g.user = query_db('select * from user where user_id = ?',
                           [session['user_id']], one=True)
 
+    if psutil.useragent_is_mobile(request.user_agent.string):
+        app.jinja_env.globals["is_mobile"] = True
+
 @app.after_request
 def after_request(response):
     """Closes the database again at the end of the request."""
@@ -123,7 +128,7 @@ def home():
 
     return render_template('home.html', bookmarks = bookmarks, stale = stale)
 
-@app.route('/click/<bookmark_id>', methods = ['GET'])
+@app.route('/click/<int:bookmark_id>', methods = ['GET'])
 def click(bookmark_id):
     """ Redirect to a link. """
     if 'user_id' not in session:
@@ -138,12 +143,15 @@ def click(bookmark_id):
 
     return redirect(link["url"])
 
-@app.route('/bookmark_lookup')
+@app.route('/bookmark/lookup/', methods = ['GET', 'POST'])
 def bookmark_lookup():
     """ Look up a feed based on this URL """
     if 'user_id' not in session:
         abort(401)
 
+    if request.method == "GET":
+        return render_template('bookmark/add.html')
+        
     url = request.form['url']
 
     if not url:
@@ -162,7 +170,7 @@ def bookmark_lookup():
 
     return render_template('bookmark/save.html', feed_url = url, feed_rss = feed, feed_title = stamp['title'])
 
-@app.route('/bookmark_save', methods=['POST'])
+@app.route('/bookmark/save', methods=['POST'])
 def bookmark_save():
     """Save a new bookmark."""
     if 'user_id' not in session:
@@ -172,14 +180,14 @@ def bookmark_save():
         feed_url = request.form['url']
         feed_title = request.form['title']
         feed_id = 0
-        open("/tmp/testtest", "w");
 
+        print "saving with id %d" % session['user_id']
         psutil.feed_bookmark(g.db, session['user_id'], feed_url, feed_rss, feed_title)
 
         # flash('Your message was recorded')
     return redirect(url_for('home'))
 
-@app.route('/bookmark_delete/<bookmark_id>')
+@app.route('/bookmark/delete/<bookmark_id>')
 def bookmark_delete(bookmark_id):
     """Delete a bookmark."""
     if 'user_id' not in session:
@@ -195,17 +203,45 @@ def bookmark_delete(bookmark_id):
     return redirect(url_for('home'))
 
 
-@app.route('/bookmark_edit/<bookmark_id>')
+@app.route('/bookmark/edit/<int:bookmark_id>')
 def bookmark_edit(bookmark_id):
     """Edit a bookmark."""
     if 'user_id' not in session:
         abort(401)
 
-@app.route('/bookmarks_import')
-def bookmarks_import():
+@app.route('/bookmark/import', methods = ['GET', 'POST'])
+def bookmark_import():
     """Import existing bookmarks in OPML format"""
     if 'user_id' not in session:
         abort(401)
+
+    if request.method == 'POST':
+        opml = request.files['file'].read()
+        error = ""
+        try:
+            bookmarks = psutil.parse_opml(opml)
+            for bookmark in bookmarks:
+                psutil.feed_bookmark(g.db, session["user_id"], bookmark["url"], bookmark["rss"], bookmark["title"])
+            flash("Successfully imported %d bookmarks." % len(bookmarks))
+            
+        except Exception, e:
+            error = "Import failed, sorry! (%s)" % e
+
+        return render_template('home.html', error = error)
+        
+    else:
+        return render_template('bookmark/import.html')
+
+@app.route('/bookmark/export', methods = ['GET', 'POST'])
+def bookmark_export():
+    """Export existing bookmarks in OPML format"""
+    if 'user_id' not in session:
+        abort(401)
+
+    if request.method == 'POST':
+        return render_template('home.html')
+    else:
+        return render_template('bookmark/export.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -213,19 +249,18 @@ def login():
     if g.user:
         return redirect(url_for('home'))
     error = None
+
     if request.method == 'POST':
         user = query_db('''select * from user where
             username = ?''', [request.form['username']], one=True)
-        if user is None:
-            error = 'Invalid username'
-        elif not check_password_hash(user['pw_hash'],
-                                     request.form['password']):
-            error = 'Invalid password'
+        if user is None or not check_password_hash(user['pw_hash'], request.form['password']):
+            error = 'Invalid credentials. Please check your username and password and try again.'
         else:
-            flash('You were logged in')
+            flash('You were logged in.')
             session['user_id'] = user['user_id']
             return redirect(url_for('home'))
-    return render_template('login.html', error=error)
+
+    return render_template('login.html', error = error)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -257,6 +292,9 @@ def register():
 
             g.db.commit()
 
+            g.user = query_db('select * from user where user_id = ?',
+                          [session['user_id']], one = True)
+
             flash("You were registered successfully")
             return render_template('welcome.html')
 
@@ -270,7 +308,7 @@ def about():
 @app.route('/logout')
 def logout():
     """Logs the user out."""
-    flash('You were logged out')
+    flash('You were logged out.')
     session.pop('user_id', None)
     return redirect(url_for('login'))
 

@@ -27,5 +27,6 @@ create table bookmark
 	feed_id 	integer not null,
 	title 		string not null,
 	created 	integer,
-	stale 		boolean
+	stale 		boolean,
+	unique (user_id, feed_id)
 );

@@ -4,25 +4,36 @@
 {% endblock %}
 {% block body %}
 
+
+
 <div class="body">
 	<div class="bookmarks">
-	<h2>Fresh</h2>
-	<ul class="bookmarks_active">
-	{% if bookmarks %}
-	{% for bookmark in bookmarks %}
-		{% include "bookmark/bookmark.html" %}
-	{% endfor %}
-	{% else %}
-		<li><i>sorry, no fresh bookmarks right now</i></li>
-	{% endif %}
-	</ul>
+
+	<div id="bookmarks_active">
+		<h2>Fresh</h2>
+		<ul>
+		{% if bookmarks %}
+		{% for bookmark in bookmarks %}
+			{% include "bookmark/bookmark.html" %}
+		{% endfor %}
+		{% else %}
+			<li style="margin-left: 32px"><i>sorry, no fresh bookmarks right now</i></li>
+		{% endif %}
+		</ul>
+	</div>
+
 	<hr />
-	<h3>Stale</h3>
-	<ul class="bookmarks_stale">
-	{% for bookmark in stale %}
-		{% include "bookmark/bookmark.html" %}
-	{% endfor %}
-	</ul>
+
+	<div id="bookmarks_stale">
+		<h2>Stale</h2>
+		<p class="subtitle"><a id="bookmarks_hide" class="active" href="#">show</a></p>
+		<ul>
+		{% for bookmark in stale %}
+			{% include "bookmark/bookmark.html" %}
+		{% endfor %}
+		</ul>
+	</div>
+
 	</div>
 	<hr />
 	<div class="controls">

@@ -2,7 +2,10 @@
 <html>
 <head>
 	<title>{% block title %}welcome{% endblock %} | pysoso</title>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+	<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='style.css') }}">
+	{% if is_mobile %}
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='mobile.css') }}">
+	{% endif %}
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='pysoso.js') }}"></script>
 	
@@ -13,34 +16,43 @@
 		<h1><a href="{{ url_for("home") }}">pysoso</a></h1>
 		<div id="nav">
 
-		{% if g.user %}
-		<p>
-		logged in as <strong>{{ g.user.username }}</strong>
-		</p>
 		<ul class="nav">
 			<li><a href="{{ url_for('home') }}">home</a></li>
 			<li><a href="{{ url_for('about') }}">about</a></li>
-			<li><a href="{{ url_for('logout') }}">sign out</a></li>
+		{% if g.user %}
 		</ul>
-		{% else %}
+			<p>logged in as <strong>{{ g.user.username }}</strong></p>
 		<ul class="nav">
-			<li><a href="{{ url_for('about') }}">about</a></li>
+			<li><a href="{{ url_for('bookmark_import') }}">import</a></li>
+			<li><a href="{{ url_for('bookmark_export') }}">export</a></li>
+			<li><a href="{{ url_for('logout') }}">sign out</a></li>
+		{% else %}
 			<li><a href="{{ url_for('register') }}">sign up</a></li>
 			<li><a href="{{ url_for('login') }}">sign in</a></li>
-		</ul>
 		{% endif %}
+		</ul>
 
 		</div>
 	</div>
+
 	{% with flashes = get_flashed_messages() %}
 		{% if flashes %}
-			<ul class="flashes">
 			{% for message in flashes %}
-				<li>{{ message }}
+				<div class="flash">
+				{{ message }}
+				</div>
 			{% endfor %}
-			</ul>
 		{% endif %}
 	{% endwith %}
+
+	{% if error %}
+	<div class="error">
+		<strong>Error:</strong> {{ error }}
+	</div>
+	{% endif %}
+
+	<!-- <div class="flash">This is a test flash.</div> -->
+
 	{% block body %}{% endblock %}
 
 	<hr />
