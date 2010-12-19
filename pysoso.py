@@ -22,7 +22,7 @@ from hashlib import md5
 from datetime import datetime
 from contextlib import closing
 from flask import Flask, request, session, url_for, redirect, \
-     render_template, abort, g, flash, jsonify
+     render_template, abort, g, flash, jsonify, make_response
 from werkzeug import check_password_hash, generate_password_hash
 
 
@@ -239,7 +239,10 @@ def bookmark_export():
         abort(401)
 
     if request.method == 'POST':
-        return render_template('home.html')
+        bookmarks = query_db("select feed.*, bookmark.*, user.* from feed, bookmark, user where bookmark.user_id = user.user_id and feed.feed_id = bookmark.feed_id and user.user_id = ? order by modified desc", [ session['user_id'] ])
+        response = make_response(render_template('bookmark/export.xml', bookmarks = bookmarks))
+        response.headers["Content-Type"] = "application/xml"
+        return response
     else:
         return render_template('bookmark/export.html')
 
@@ -258,6 +261,7 @@ def login():
         else:
             flash('You were logged in.')
             session['user_id'] = user['user_id']
+            session.permanent = True
             return redirect(url_for('home'))
 
     return render_template('login.html', error = error)

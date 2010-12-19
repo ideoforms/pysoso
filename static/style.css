@@ -1,3 +1,7 @@
+/*--------------------------------------------------------------------*
+ * ELEMENTS
+ *--------------------------------------------------------------------*/
+
 body
 {
 	background: #fafafa;
@@ -80,13 +84,22 @@ dd
 	padding: 0.5em;
 }
 
+input, textarea
+{
+	font-family: inherit;
+}
+
+/*--------------------------------------------------------------------*
+ * GLOBAL IDs/CLASSES
+ *--------------------------------------------------------------------*/
+
 #nav
 {
 	margin-top: -1.5em;
 	padding: 0 0px;
 }
 
-ul.nav
+#nav ul
 {
 	list-style: none;
 	margin: 0px;
@@ -94,56 +107,7 @@ ul.nav
 	padding: 0px 32px;
 }
 
-ul.nav li
-{
-}
-
-
-input, textarea
-{
-	font-family: inherit;
-}
-
-.bookmarks
-{
-	text-transform: lowercase;
-}
-
-.bookmarks ul
-{
-	margin: 0;
-	padding: 0;
-}
-
-.bookmarks li
-{
-	color: #888;
-	list-style: none;
-	margin: 0;
-	padding: 0 0px;
-}
-
-#bookmarks_active ul
-{
-	font-size: 120%;
-}
-#bookmarks_stale ul
-{
-	display: none;
-}
-
-.error
-{
-	border: 1px dotted #aaa;
-	padding: 1.5em;
-}
-
-.subtitle
-{
-	margin-top: -1.5em;
-}
-
-.header
+#header
 {
 	position: absolute;
 	width: 200px;
@@ -156,9 +120,70 @@ input, textarea
 	background: #eee;
 	padding: 32px;
 	width: 500px;
-	-moz-border-radius: 1.5em;
+	-moz-border-radius: 24px;
+	border-radius: 24px;
 	margin-left: 220px;
 	margin-bottom: 32px;
+}
+
+#bookmarks
+{
+	text-transform: lowercase;
+}
+
+#bookmarks ul
+{
+	margin: 0;
+	padding: 0;
+}
+
+#bookmarks li
+{
+	color: #888;
+	list-style: none;
+	margin: 0;
+	padding: 0 0px;
+}
+
+#bookmarks .tools
+{
+	visibility: hidden;
+	margin: 0 4px;
+}
+#bookmarks .visible
+{
+	visibility: visible !important;
+}
+
+#bookmarks_active ul
+{
+	font-size: 120%;
+}
+
+#bookmarks_stale ul
+{
+}
+
+
+#footer
+{
+	color: #888;
+}
+
+
+/*--------------------------------------------------------------------*
+ * CLASSES
+ *--------------------------------------------------------------------*/
+
+.error
+{
+	border: 1px dotted #aaa;
+	padding: 1.5em;
+}
+
+.subtitle
+{
+	margin-top: -1.5em;
 }
 
 .flash, .error
@@ -168,20 +193,6 @@ input, textarea
 	margin-top: 64px;
 }
 
-.footer
-{
-	color: #888;
-}
-
-.bookmarks .tools
-{
-	visibility: hidden;
-	margin: 0 4px;
-}
-.bookmarks .visible
-{
-	visibility: visible !important;
-}
 .icon
 {
 	position: relative;
@@ -189,7 +200,7 @@ input, textarea
 }
 .icon:hover
 {
-	background: #b32;
+	background: #ddd;
 }
 
 .controls a
@@ -201,3 +212,7 @@ input, textarea
 	color: #b43;
 }
 
+.nodisplay
+{
+	display: none;
+}

@@ -17,38 +17,59 @@ $(function()
 		if ($(this).hasClass("active"))
 		{
 			$(this).removeClass("active");
-			$("div.bookmarks .tools").removeClass("visible");
+			$("#bookmarks .tools").removeClass("visible");
 		}
 		else
 		{
 			$(this).addClass("active");
-			$("div.bookmarks .tools").addClass("visible");
+			$("#bookmarks .tools").addClass("visible");
 		}
 		return false;
 	});
 
-	$('#bookmarks_hide').bind('click', function () {
+	$('#bookmarks_show').bind('click', function () {
 		if ($(this).hasClass("active"))
 		{
 			$(this).removeClass("active");
-			$(this).text("show");
-			$("#bookmarks_stale ul").addClass("folded");
+			// $(this).text("show");
+			$("#bookmarks_stale ul").addClass("nodisplay");
 		}
 		else
 		{
 			$(this).addClass("active");
-			$(this).text("hide");
-			$("#bookmarks_stale ul").removeClass("folded");
+			// $(this).text("hide");
+			$("#bookmarks_stale ul").removeClass("nodisplay");
 		}
 	});
 
-	$('.bookmarks .delete').bind('click', function () {
+	$('#bookmarks .edit').bind('mouseover', function () {
+		var el = $(this).parents("li").children(".bookmark")[0];
+		el.style.textDecoration = "underline";
+	});
+
+	$('#bookmarks .edit').bind('mouseout', function () {
+		var el = $(this).parents("li").children(".bookmark")[0];
+		el.style.textDecoration = "none";
+	});
+
+	$('#bookmarks .delete').bind('mouseover', function () {
+		var el = $(this).parents("li").children(".bookmark")[0];
+		el.style.textDecoration = "line-through";
+	});
+
+	$('#bookmarks .delete').bind('mouseout', function () {
+		var el = $(this).parents("li").children(".bookmark")[0];
+		el.style.textDecoration = "none";
+	});
+
+
+	$('#bookmarks .delete').bind('click', function () {
 		$(this).parents("li").hide("slow");
 		$.getJSON($(this).attr("href"));
 		return false;
 	});
 
-	$('.bookmarks .bookmark').bind('click', function () {
+	$('#bookmarks .bookmark').bind('click', function () {
 		$(this).parents("li").hide("slow");
 	});
 });

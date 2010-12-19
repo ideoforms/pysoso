@@ -7,7 +7,7 @@
 
 
 <div class="body">
-	<div class="bookmarks">
+	<div id="bookmarks">
 
 	<div id="bookmarks_active">
 		<h2>Fresh</h2>
@@ -25,9 +25,8 @@
 	<hr />
 
 	<div id="bookmarks_stale">
-		<h2>Stale</h2>
-		<p class="subtitle"><a id="bookmarks_hide" class="active" href="#">show</a></p>
-		<ul>
+		<h2>Stale <a href="#" id="bookmarks_show"><img src="{{ url_for("static", filename = "icon/show.gif") }}" alt="show" width="12" height="12" class="icon" /></a></h2>
+		<ul class="nodisplay">
 		{% for bookmark in stale %}
 			{% include "bookmark/bookmark.html" %}
 		{% endfor %}

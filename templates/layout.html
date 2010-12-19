@@ -11,18 +11,18 @@
 	
 </head>
 <body>
-<div class="page">
-	<div class="header">
+<div id="page">
+	<div id="header">
 		<h1><a href="{{ url_for("home") }}">pysoso</a></h1>
 		<div id="nav">
 
-		<ul class="nav">
+		<ul>
 			<li><a href="{{ url_for('home') }}">home</a></li>
 			<li><a href="{{ url_for('about') }}">about</a></li>
 		{% if g.user %}
 		</ul>
 			<p>logged in as <strong>{{ g.user.username }}</strong></p>
-		<ul class="nav">
+		<ul>
 			<li><a href="{{ url_for('bookmark_import') }}">import</a></li>
 			<li><a href="{{ url_for('bookmark_export') }}">export</a></li>
 			<li><a href="{{ url_for('logout') }}">sign out</a></li>
@@ -56,7 +56,7 @@
 	{% block body %}{% endblock %}
 
 	<hr />
-	<div class="footer">
+	<div id="footer">
 		<p>
 		</p>
 	</div>

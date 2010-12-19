@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+	<head>
+		<title>pysoso bookmarks for {{ g.user.username }}</title>
+	</head>
+	<body>
+		{% for bookmark in bookmarks %}
+		<outline text="{{ bookmark.title }}" title="{{ bookmark.title }}" type="rss" xmlUrl="{{ bookmark.rss }}" htmlUrl="{{ bookmark.url }}" />
+		{% endfor %}
+	</body>
+</opml>
