@@ -32,13 +32,15 @@ $(function()
 		{
 			$(this).removeClass("active");
 			// $(this).text("show");
-			$("#bookmarks_stale ul").addClass("nodisplay");
+			// $("#bookmarks_stale ul").addClass("nodisplay");
+			$("#bookmarks_stale ul").hide("slow");
 		}
 		else
 		{
 			$(this).addClass("active");
 			// $(this).text("hide");
-			$("#bookmarks_stale ul").removeClass("nodisplay");
+			// $("#bookmarks_stale ul").removeClass("nodisplay");
+			$("#bookmarks_stale ul").show("slow");
 		}
 	});
 

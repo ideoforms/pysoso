@@ -1,8 +1,8 @@
 		<li>
 			<span class="tools">
-			<a title="edit" class="edit" href="{{ url_for("bookmark_edit", bookmark_id = bookmark.bookmark_id) }}" onclick="return false"><img class="icon" src="{{ url_for("static", filename = "icon/edit.png") }}" alt="delete" width="12" height="12" /></a>
-			<a title="delete" class="delete" href="{{ url_for("bookmark_delete", bookmark_id = bookmark.bookmark_id) }}" onclick="return false"><img class="icon" src="{{ url_for("static", filename = "icon/delete-hole.png") }}" alt="delete" width="12" height="12" /></a>
+			<a title="edit" class="edit" href="{{ url_for("bookmark_edit", bookmark_id = bookmark.bookmark_id) }}"><img class="icon" src="{{ url_for("static", filename = "icon/edit.png") }}" alt="edit" width="12" height="12" /></a>
+			<a title="delete" class="delete" href="{{ url_for("bookmark_delete", bookmark_id = bookmark.bookmark_id) }}"><img class="icon" src="{{ url_for("static", filename = "icon/delete-hole.png") }}" alt="delete" width="12" height="12" /></a>
 			</span>
 			<a class="bookmark" target="_new" href="{{ url_for("click", bookmark_id = bookmark.bookmark_id) }}">{{ bookmark.title }}</a>
-			<small>&mdash; {{ bookmark.modified|timeagoformat }}</small>
+			<small class="freshness">{{ bookmark.modified|timeagoformat }}</small>
 		</li>

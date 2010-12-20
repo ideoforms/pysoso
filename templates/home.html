@@ -17,27 +17,40 @@
 			{% include "bookmark/bookmark.html" %}
 		{% endfor %}
 		{% else %}
-			<li style="margin-left: 32px"><i>sorry, no fresh bookmarks right now</i></li>
+			<li style="margin-left: 32px; font-size: 83%"><i>
+				sorry, no fresh bookmarks right now.
+				{% if not stale %}
+				<br /><a href="{{ url_for("bookmark_lookup") }}">add a bookmark</a> to get started.
+				{% endif %}
+			</i></li>
 		{% endif %}
 		</ul>
 	</div>
 
+	{% if stale %}
 	<hr />
 
 	<div id="bookmarks_stale">
-		<h2>Stale <a href="#" id="bookmarks_show"><img src="{{ url_for("static", filename = "icon/show.gif") }}" alt="show" width="12" height="12" class="icon" /></a></h2>
+		<h2>Stale <a href="#" id="bookmarks_show"><img src="{{ url_for("static", filename = "icon/magnify.png") }}" alt="show" width="12" height="12" class="icon" /></a></h2>
 		<ul class="nodisplay">
+		{% if stale %}
 		{% for bookmark in stale %}
 			{% include "bookmark/bookmark.html" %}
 		{% endfor %}
+		{% else %}
+			<li style="margin-left: 32px"><i>sorry, no stale bookmarks right now</i></li>
+		{% endif %}
 		</ul>
 	</div>
+	{% endif %}
 
 	</div>
+	{% if stale or bookmnarks %}
 	<hr />
 	<div class="controls">
 		<a href="#" id="edit">edit bookmarks</a>
 	</div>
+	{% endif %}
 
 </div>
 

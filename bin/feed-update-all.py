@@ -1,10 +1,18 @@
 #!/usr/bin/python
 
+import os
 import sys
 import time
+import sqlite3
+
+#----------------------------------------------------------------------
+# the imports we want are in the parent directory
+#----------------------------------------------------------------------
+parent = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "..") 
+sys.path.append(parent)
+
 import pysoso
 import psutil
-import sqlite3
 
 def main():
     if len(sys.argv) > 1 and sys.argv[1] == "-q":

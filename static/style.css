@@ -160,8 +160,45 @@ input, textarea
 	font-size: 120%;
 }
 
+#bookmarks_active li
+{
+}
+
+#bookmarks_active li
+{
+	display: block;
+	margin-left: 0px;
+	margin-bottom: 12px;
+}
+#bookmarks_active .tools
+{
+	width: 28px;
+	height: 28px;
+	float: left;
+	position: relative;
+	top: 2px;
+	left: -4px;
+	line-height: 20px;
+}
+
+#bookmarks_active .bookmark
+{
+	font-size: 200%;
+	display: block;
+	margin-bottom: 4px;
+}
+
 #bookmarks_stale ul
 {
+}
+
+#bookmarks_stale .freshness
+{
+	margin-left: 1em;
+}
+#bookmarks_stale .freshness:before
+{
+	content: "...";
 }
 
 
@@ -174,12 +211,6 @@ input, textarea
 /*--------------------------------------------------------------------*
  * CLASSES
  *--------------------------------------------------------------------*/
-
-.error
-{
-	border: 1px dotted #aaa;
-	padding: 1.5em;
-}
 
 .subtitle
 {
@@ -197,10 +228,11 @@ input, textarea
 {
 	position: relative;
 	top: 1px;
+	opacity: 0.3;
 }
-.icon:hover
+.icon:hover, .active .icon
 {
-	background: #ddd;
+	opacity: 1.0;
 }
 
 .controls a

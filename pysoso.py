@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-
 # -*- coding: utf-8 -*-
 """
     pysoso
@@ -16,6 +15,7 @@ import time
 
 import psutil
 import werkzeug
+import re
 
 from sqlite3 import dbapi2 as sqlite3
 from hashlib import md5
@@ -162,7 +162,7 @@ def bookmark_lookup():
     feed = psutil.feed_detect(url)
 
     if not feed:
-        return render_template('bookmark/add.html', error = "Sorry, I couldn't find an RSS feed for the URL <a href='%s'>%s</a>. Please verify that one exists.'" % (url, url))
+        return render_template('bookmark/add.html', error = "Sorry, I couldn't find an RSS feed for the URL <a href='%s'>%s</a>. Please verify that one exists." % (url, url))
 
     stamp = psutil.feed_modified(feed)
     if url == feed:
@@ -182,7 +182,11 @@ def bookmark_save():
         feed_id = 0
 
         print "saving with id %d" % session['user_id']
-        psutil.feed_bookmark(g.db, session['user_id'], feed_url, feed_rss, feed_title)
+        try:
+            psutil.feed_bookmark(g.db, session['user_id'], feed_url, feed_rss, feed_title)
+        except:
+            return render_template('bookmark/save.html', error = "Sorry, something went wrong whilst saving this bookmark. Please check that the feed URL is correct.", feed_rss = feed_rss, feed_url = feed_url, feed_title = feed_title)
+            
 
         # flash('Your message was recorded')
     return redirect(url_for('home'))
@@ -208,6 +212,9 @@ def bookmark_edit(bookmark_id):
     """Edit a bookmark."""
     if 'user_id' not in session:
         abort(401)
+
+    bookmark = query_db("select feed.*, bookmark.* from bookmark, feed where bookmark.feed_id = feed.feed_id and bookmark_id = ?", [ bookmark_id ], one = True)
+    return render_template('bookmark/save.html', feed_url = bookmark["url"], feed_rss = bookmark["rss"], feed_title = bookmark["title"])
 
 @app.route('/bookmark/import', methods = ['GET', 'POST'])
 def bookmark_import():
@@ -276,6 +283,8 @@ def register():
     if request.method == 'POST':
         if not request.form['username']:
             error = 'You have to enter a username'
+        elif re.search("[^a-zA-Z0-9_-]", request.form['username']) or len(request.form['username']) > 15:
+            error = 'Invalid username. Usernames must be under 16 character, and contain only alphanumeric characters, underscore and hyphen.'
         elif not request.form['email'] or \
                  '@' not in request.form['email']:
             error = 'You have to enter a valid email address'
@@ -299,7 +308,7 @@ def register():
             g.user = query_db('select * from user where user_id = ?',
                           [session['user_id']], one = True)
 
-            flash("You were registered successfully")
+            flash("thanks, you were registered successfully.")
             return render_template('welcome.html')
 
     return render_template('register.html', error=error)

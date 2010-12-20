@@ -47,7 +47,7 @@
 
 	{% if error %}
 	<div class="error">
-		<strong>Error:</strong> {{ error }}
+		<strong>Error:</strong> {{ error|safe }}
 	</div>
 	{% endif %}
 
