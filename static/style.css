@@ -236,9 +236,14 @@ input, textarea
 	opacity: 1.0;
 }
 
+.controls
+{
+	color: #999;
+}
+
 .controls a
 {
-	color: #888;
+	color: #666;
 }
 .controls a.active
 {

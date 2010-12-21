@@ -45,10 +45,13 @@
 	{% endif %}
 
 	</div>
-	{% if stale or bookmnarks %}
+	{% if stale or bookmarks %}
 	<hr />
 	<div class="controls">
-		<a href="#" id="edit">edit bookmarks</a>
+		<a href="#" id="edit">edit bookmarks</a> |
+		mark all as:
+		<a href="{{ url_for("mark", value = 0) }}" id="mark_fresh">fresh</a>,
+		<a href="{{ url_for("mark", value = 1) }}" id="mark_stale">stale</a>
 	</div>
 	{% endif %}
 

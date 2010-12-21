@@ -15,6 +15,8 @@ import time
 
 import psutil
 import werkzeug
+import sys
+import os
 import re
 
 from sqlite3 import dbapi2 as sqlite3
@@ -28,7 +30,9 @@ from werkzeug import check_password_hash, generate_password_hash
 
 # configuration
 # DATABASE = 'pysoso.db'
-DATABASE = '/var/www/vhosts/ideoforms.com/apps/pysoso/pysoso.db'
+# DATABASE = '/var/www/vhosts/ideoforms.com/apps/pysoso/pysoso.db'
+DATABASE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "pysoso.db")
+# DATABASE = '/var/www/vhosts/ideoforms.com/apps/pysoso/pysoso.db'
 PER_PAGE = 30
 DEBUG = True
 SECRET_KEY = 'development key'
@@ -221,22 +225,32 @@ def bookmark_import():
     if 'user_id' not in session:
         abort(401)
 
-    if request.method == 'POST':
-        opml = request.files['file'].read()
-        error = ""
-        try:
-            bookmarks = psutil.parse_opml(opml)
-            for bookmark in bookmarks:
-                psutil.feed_bookmark(g.db, session["user_id"], bookmark["url"], bookmark["rss"], bookmark["title"])
-            flash("Successfully imported %d bookmarks." % len(bookmarks))
-            
-        except Exception, e:
-            error = "Import failed, sorry! (%s)" % e
-
-        return render_template('home.html', error = error)
-        
-    else:
+    if request.method == 'GET':
         return render_template('bookmark/import.html')
+
+    opml = request.files['file'].read()
+    bookmarks = []
+    error = None
+
+    try:
+        bookmarks = psutil.parse_opml(opml)
+    except Exception, e:
+        return render_template("bookmark/import.html", error = "Import failed, sorry! (%s)" % e)
+
+    for bookmark in bookmarks:
+        bookmark["imported"] = False
+        try:
+            psutil.feed_bookmark(g.db, session["user_id"], bookmark["url"], bookmark["rss"], bookmark["title"])
+            bookmark["imported"] = True
+        except Exception, e:
+            bookmark["exception"] = e
+
+    bookmarks_imported = filter(lambda n: n["imported"], bookmarks)
+    bookmarks_failed = filter(lambda n: not n["imported"], bookmarks)
+
+    flash("Successfully imported %d bookmarks." % len(bookmarks_imported))
+
+    return render_template('bookmark/import_done.html', bookmarks_imported = bookmarks_imported, bookmarks_failed = bookmarks_failed)
 
 @app.route('/bookmark/export', methods = ['GET', 'POST'])
 def bookmark_export():
@@ -251,6 +265,19 @@ def bookmark_export():
         return response
     else:
         return render_template('bookmark/export.html')
+
+@app.route('/bookmark/mark/<int:value>')
+def mark(value):
+    """Mark all bookmarks as fresh or stale"""
+    if 'user_id' not in session:
+        abort(401)
+
+    if (value == 0 or value == 1):
+        g.db.execute('update bookmark set stale = ? where user_id = ?', [ value, session['user_id'] ])
+        g.db.commit()
+        flash("bookmarks updated successfully.")
+        
+    return redirect(url_for('home'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -311,6 +338,23 @@ def register():
             return render_template('welcome.html')
 
     return render_template('register.html', error=error)
+
+@app.route('/lost', methods = ['GET', 'POST'])
+def lost():
+    """Sends out a lost password reminder."""
+    if g.user:
+        return redirect(url_for('home'))
+
+    if request.method == 'GET' or not request.form['username']:
+        return render_template("lost.html")
+    else:
+        rv = g.db.execute('select * from user where username = ?',
+             [ request.form['username'] ]).fetchone()
+        if not rv:
+            return render_template("lost.html", error = "sorry, couldn't find that username.")
+
+        flash("a new password has been sent out. it should be with you within a few minutes.")
+        return render_template("lost.html")
 
 @app.route('/about')
 def about():

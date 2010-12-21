@@ -3,7 +3,7 @@ import time
 import urllib2
 import urlparse
 import feedparser
-import lxml.html
+# import lxml.html
 import email.utils
 import sqlite3
 import xml.dom.minidom

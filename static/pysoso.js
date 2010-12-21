@@ -74,4 +74,5 @@ $(function()
 	$('#bookmarks .bookmark').bind('click', function () {
 		$(this).parents("li").hide("slow");
 	});
+
 });
