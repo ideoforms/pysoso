@@ -3,7 +3,7 @@ import time
 import urllib2
 import urlparse
 import feedparser
-import lxml.html
+# import lxml.html
 import email.utils
 import sqlite3
 import xml.dom.minidom
@@ -29,8 +29,10 @@ def useragent_is_mobile(ua):
     
     for agent in mobile_agents:
         if re.search(agent, ua):
+            print "found %s in %s" % (agent, ua)
             return True
 
+    print "not found"
     return False
 
 def feed_modified(url, lastmod = 0, etag = None):

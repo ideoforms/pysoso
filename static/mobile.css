@@ -2,21 +2,27 @@ body
 {
 	margin: 8px;
 	padding: 0;
-	font-size: 21pt;
+	font-size: 28pt;
 }
 
 
-.header
+#header
 {
 	position: static;
 	width: auto;
 }
 
-.nav li
+#nav li
 {
 	margin: 0;
 	display: inline;
 	margin-right: 2em;
+}
+
+dd, dt
+{
+	display: block;
+	text-align: left;
 }
 
 .body
@@ -24,3 +30,4 @@ body
 	margin: 0;
 	width: 100%;
 }
+
