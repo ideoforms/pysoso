@@ -108,8 +108,7 @@ def before_request():
         g.user = query_db('select * from user where user_id = ?',
                           [session['user_id']], one=True)
 
-    if psutil.useragent_is_mobile(request.user_agent.string):
-        app.jinja_env.globals["is_mobile"] = True
+    app.jinja_env.globals["is_mobile"] = psutil.useragent_is_mobile(request.user_agent.string)
 
 @app.after_request
 def after_request(response):
