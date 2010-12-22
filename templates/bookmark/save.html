@@ -7,11 +7,13 @@
 	<form action="{{ url_for('bookmark_save') }}" method="post">
 		<dl>
 			<dt>Title:
-			<dd><input type="text" name="title" size="50" value="{{ feed_title }}">
+			<dd><input type="text" name="title" size="50" value="{{ bookmark["title"] }}">
 			<dt>Link URL:
-			<dd><input type="text" name="url" size="50" value="{{ feed_url }}">
+			<dd><input type="text" name="url" size="50" value="{{ bookmark["url"] }}">
 			<dt>Feed URL:
-			<dd><input type="text" name="rss" size="50" value="{{ feed_rss }}">
+			<dd><input type="text" name="rss" size="50" value="{{ bookmark["rss"] }}">
+			<dt>Tags:
+			<dd><input type="text" name="tags" size="50" value="{{ bookmark["tags"]|join(" ") }}">
 		</dl>
 		<div class="submit"><input type="submit" value="Save"></div>
 	</form>

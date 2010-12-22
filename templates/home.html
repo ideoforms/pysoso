@@ -5,12 +5,15 @@
 {% block body %}
 
 
-
 <div class="body">
 	<div id="bookmarks">
- <span class="color: #bcd" fresh fresh fresh fresh</span>
 	<div id="bookmarks_active">
-		<h2>Fresh <a class="active bookmarks_show" href="#"><img src="{{ url_for("static", filename = "icon/magnify.png") }}" alt="show" width="12" height="12" class="icon" /></a></h2>
+		<h2>Fresh
+			{% for tag in tags %}
+			<a class="tag_show" title="{{ tag }}" href="#">{{ tag }}</a>
+			{% endfor %}
+			<a class="active bookmarks_show" href="#"><img src="{{ url_for("static", filename = "icon/magnify.png") }}" alt="show" width="12" height="12" class="icon" /></a>
+		</h2>
 		<ul>
 		{% if bookmarks %}
 		{% for bookmark in bookmarks %}

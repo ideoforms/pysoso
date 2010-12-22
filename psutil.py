@@ -123,6 +123,9 @@ def feed_bookmark(db, user_id, feed_url, feed_rss, feed_title):
         c.execute('insert or replace into bookmark (user_id, feed_id, title, created, stale) values (?, ?, ?, ?, ?)',
             (user_id, feed_id, feed_title, int(time.time()), False))
         db.commit()
+
+        return c.lastrowid
+
     except sqlite3.Error, e:
         print "An error occurred:", e.args[0]
 

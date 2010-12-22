@@ -1,6 +1,5 @@
 $SCRIPT_ROOT = "/pysoso";
 
-
 $(function()
 {
 	$('a#calculate').bind('click', function() {
@@ -11,6 +10,15 @@ $(function()
 			$("#result").text(data.result);
 		});
 		return false;
+	});
+
+	$('html').keypress(function(event) {
+  		if (event.which == '101') {
+			$('a#edit').click();
+		}
+		else if (event.which = 110)
+		{
+		}
 	});
 
 	$('a#edit').bind('click', function () {
@@ -25,6 +33,25 @@ $(function()
 			$("#bookmarks .tools").show();
 		}
 		return false;
+	});
+
+	$('.tag_show').bind('click', function () {
+		if ($(this).hasClass("active"))
+		{
+			var li = $(this).parents("#bookmarks").find("li");
+			li.show();
+			$(this).removeClass("active");
+		}
+		else
+		{
+			var tag = $(this).attr("title");
+			var li = $(this).parents("#bookmarks").find("li[tags~=" + tag + "]");
+			li.show();
+			li = $(this).parents("#bookmarks").find("li:not([tags~=" + tag + "])");
+			li.hide();
+			$(this).parents("h2").find(".tag_show").removeClass("active");
+			$(this).addClass("active");
+		}
 	});
 
 	$('.bookmarks_show').bind('click', function () {

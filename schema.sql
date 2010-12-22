@@ -11,7 +11,7 @@ drop table if exists prefs;
 create table prefs
 (
 	user_id		integer not null,
-	new_window	boolean default true
+	new_window	boolean default 1
 );
 
 
@@ -37,4 +37,12 @@ create table bookmark
 	created 	integer,
 	stale 		boolean,
 	unique (user_id, feed_id)
+);
+
+drop table if exists tag;
+create table tag
+(
+	bookmark_id 	integer not null,
+	tag		string not null,
+	unique (bookmark_id, tag)
 );

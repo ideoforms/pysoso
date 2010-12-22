@@ -72,6 +72,29 @@ def get_user_id(username):
                        [username]).fetchone()
     return rv[0] if rv else None
 
+def process_bookmarks(bookmark_tags):
+    bookmarks = []
+    tags = []
+    for bookmark in bookmark_tags:
+        found = False
+        for existing in bookmarks:
+            if existing["rss"] == bookmark["rss"]:
+                existing["tags"].append(bookmark["tag"])
+                found = True
+                break
+        if not found:
+            if bookmark["tag"]:
+                bookmark["tags"] = [ bookmark["tag"] ]
+            bookmarks.append(bookmark)
+    return bookmarks
+
+def get_bookmark(bookmark_id):
+    bookmark_tags = query_db("select feed.*, bookmark.*, tag.tag from feed, bookmark, user left join tag on tag.bookmark_id = bookmark.bookmark_id where feed.feed_id = bookmark.feed_id and bookmark.bookmark_id = ? order by modified desc", [ bookmark_id ])
+    return process_bookmarks(bookmark_tags)[0]
+
+def get_bookmarks_for_user(user_id):
+    bookmark_tags = query_db("select feed.*, bookmark.*, user.*, tag.tag from feed, bookmark, user left join tag on tag.bookmark_id = bookmark.bookmark_id where bookmark.user_id = user.user_id and feed.feed_id = bookmark.feed_id and user.user_id = ? order by modified desc", [ user_id ])
+    return process_bookmarks(bookmark_tags)
 
 def format_datetime(timestamp):
     """Format a timestamp for display."""
@@ -137,10 +160,17 @@ def home():
     """show my bookmarks"""
     if not g.user:
         return redirect(url_for('login'))
-    bookmarks = query_db("select feed.*, bookmark.*, user.* from feed, bookmark, user where bookmark.user_id = user.user_id and not bookmark.stale and feed.feed_id = bookmark.feed_id and user.user_id = ? order by modified desc", [ session['user_id'] ])
-    stale = query_db("select feed.*, bookmark.*, user.* from feed, bookmark, user where bookmark.user_id = user.user_id and bookmark.stale and feed.feed_id = bookmark.feed_id and user.user_id = ? order by modified desc", [ session['user_id'] ])
 
-    return render_template('home.html', bookmarks = bookmarks, stale = stale)
+    bookmarks = get_bookmarks_for_user(session["user_id"])
+    stale = filter(lambda n: n["stale"], bookmarks)
+    bookmarks = filter(lambda n: not n["stale"], bookmarks)
+
+    # stale = query_db("select feed.*, bookmark.*, user.* from feed, bookmark, user where bookmark.user_id = user.user_id and bookmark.stale and feed.feed_id = bookmark.feed_id and user.user_id = ? order by modified desc", [ session['user_id'] ])
+
+    tags = query_db("select tag from tag, bookmark, user where bookmark.user_id = 1 and bookmark.user_id = user.user_id and tag.bookmark_id = bookmark.bookmark_id and user.user_id = ? group by tag", [ session['user_id'] ])
+    tags = map(lambda n: n["tag"], tags)
+
+    return render_template('home.html', bookmarks = bookmarks, stale = stale, tags = tags)
 
 @app.route('/click/<int:bookmark_id>', methods = ['GET'])
 def click(bookmark_id):
@@ -182,25 +212,38 @@ def bookmark_lookup():
     if url == feed:
         url = stamp['link']
 
-    return render_template('bookmark/save.html', feed_url = url, feed_rss = feed, feed_title = stamp['title'])
+    bookmark = { 'url' : url, 'rss' : feed, 'title': stamp['title'], 'tags' : [] }
+
+    return render_template('bookmark/save.html', bookmark = bookmark)
 
 @app.route('/bookmark/save', methods=['POST'])
 def bookmark_save():
     """Save a new bookmark."""
     if 'user_id' not in session:
         abort(401)
+
     if request.form['title']:
-        feed_rss = request.form['rss']
-        feed_url = request.form['url']
-        feed_title = request.form['title']
+        bookmark = {
+            'rss' : request.form['rss'],
+            'url' : request.form['url'],
+            'title' : request.form['title'],
+            'tags' : map(lambda n: n.rstrip(","), request.form['tags'].split())
+        }
         feed_id = 0
+        for tag in bookmark['tags']:
+            if not re.search("^[a-zA-Z0-9_-]+$", tag):
+                return render_template('bookmark/save.html', error = "Invalid tag: %s" % tag, bookmark = bookmark)
 
         print "saving with id %d" % session['user_id']
         try:
-            psutil.feed_bookmark(g.db, session['user_id'], feed_url, feed_rss, feed_title)
-        except:
-            return render_template('bookmark/save.html', error = "Sorry, something went wrong whilst saving this bookmark. Please check that the feed URL is correct.", feed_rss = feed_rss, feed_url = feed_url, feed_title = feed_title)
-            
+            bookmark_id = psutil.feed_bookmark(g.db, session['user_id'], bookmark['url'], bookmark['rss'], bookmark['title'])
+            g.db.execute("delete from tag where bookmark_id = ?", [ bookmark_id ])
+            for tag in bookmark['tags']:
+                g.db.execute("insert into tag (bookmark_id, tag) values (?, ?)", [ bookmark_id, tag ])
+            g.db.commit()
+
+        except Exception, e:
+            return render_template('bookmark/save.html', error = "Sorry, something went wrong whilst saving this bookmark. Please check that the feed URL is correct. (%s)" % e, bookmark = bookmark)
 
         # flash('Your message was recorded')
     return redirect(url_for('home'))
@@ -227,8 +270,8 @@ def bookmark_edit(bookmark_id):
     if 'user_id' not in session:
         abort(401)
 
-    bookmark = query_db("select feed.*, bookmark.* from bookmark, feed where bookmark.feed_id = feed.feed_id and bookmark_id = ?", [ bookmark_id ], one = True)
-    return render_template('bookmark/save.html', feed_url = bookmark["url"], feed_rss = bookmark["rss"], feed_title = bookmark["title"])
+    bookmark = get_bookmark(bookmark_id)
+    return render_template('bookmark/save.html', bookmark = bookmark)
 
 @app.route('/bookmark/import', methods = ['GET', 'POST'])
 def bookmark_import():
