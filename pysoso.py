@@ -120,6 +120,8 @@ def before_request():
             g.prefs = {
                 'new_window'   : True
             }
+            g.db.execute("insert into prefs (user_id) values (?)", [ session["user_id"] ])
+            g.db.commit()
 
     app.jinja_env.globals["is_mobile"] = psutil.useragent_is_mobile(request.user_agent.string)
 
