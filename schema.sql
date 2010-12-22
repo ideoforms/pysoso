@@ -7,6 +7,14 @@ create table user
 	pw_hash 	string not null
 );
 
+drop table if exists prefs;
+create table prefs
+(
+	user_id		integer not null,
+	new_window	boolean default true
+);
+
+
 drop table if exists feed;
 create table feed
 (

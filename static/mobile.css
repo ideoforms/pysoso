@@ -2,7 +2,7 @@ body
 {
 	margin: 8px;
 	padding: 0;
-	font-size: 28pt;
+	font-size: 100%;
 }
 
 
@@ -35,6 +35,10 @@ dd, dt
 	width: 100%;
 	background: transparent;
 }
+.flash, .error
+{
+	margin-left: 0;
+}
 
 #bookmarks .tools
 {
@@ -44,3 +48,19 @@ dd, dt
 .bookmark
 {
 }
+
+.icon
+{
+	width: 20px;
+	height: 20px;
+}
+#bookmarks .tools
+{
+	line-height: 30px;
+}
+
+#nav 
+{
+	display: none;
+}
+

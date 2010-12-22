@@ -46,6 +46,7 @@ h1, h2, h3
 h1
 {
 	font-size: 300%;
+	margin-bottom: 0.5em;
 }
 h1 a
 {
@@ -97,7 +98,7 @@ input, textarea
 
 #nav
 {
-	margin-top: -1.5em;
+	margin-top: 0em;
 	padding: 0 0px;
 }
 
@@ -154,7 +155,7 @@ input, textarea
 #bookmarks li
 {
 	color: #aaa;
-	list-style: none;
+	list-style-type: none;
 	margin: 0 0 0 0px;
 	padding: 0 0px;
 }
@@ -219,7 +220,8 @@ input, textarea
 {
 	font-size: 200%;
 	display: block;
-	padding: 2px 0;
+	padding: 6px 12px 20px;
+	margin: -6px -12px -20px;
 	-moz-border-radius: 24px;
 	border-radius: 24px;
 }
@@ -283,16 +285,23 @@ input, textarea
 	opacity: 1.0;
 }
 
-.controls
+#controls
 {
 	color: #999;
 }
 
-.controls a
+#controls ul, #controls li
+{
+	list-style: disc;
+	padding-left: 6px;
+	margin-left: 6px;
+}
+
+#controls a
 {
 	color: #666;
 }
-.controls a.active
+#controls a.active
 {
 	color: #b43;
 }

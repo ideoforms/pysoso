@@ -32,7 +32,8 @@ from werkzeug import check_password_hash, generate_password_hash
 # DATABASE = 'pysoso.db'
 # DATABASE = '/var/www/vhosts/ideoforms.com/apps/pysoso/pysoso.db'
 # DATABASE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "pysoso.db")
-DATABASE = '/var/www/vhosts/ideoforms.com/apps/pysoso/pysoso.db'
+# DATABASE = '/var/www/vhosts/ideoforms.com/apps/pysoso/pysoso.db'
+DATABASE = '/var/www/vhosts/ideoforms.com/apps/pysoso-dev/pysoso.db'
 PER_PAGE = 30
 DEBUG = True
 SECRET_KEY = 'development key'
@@ -113,6 +114,12 @@ def before_request():
     if 'user_id' in session:
         g.user = query_db('select * from user where user_id = ?',
                           [session['user_id']], one=True)
+        g.prefs = query_db('select * from prefs where user_id = ?',
+                          [session['user_id']], one = True)
+        if not g.prefs:
+            g.prefs = {
+                'new_window'   : True
+            }
 
     app.jinja_env.globals["is_mobile"] = psutil.useragent_is_mobile(request.user_agent.string)
 
@@ -279,6 +286,20 @@ def mark(value):
         g.db.commit()
         flash("bookmarks updated successfully.")
         
+    return redirect(url_for('home'))
+
+@app.route('/pref/<key>/<int:value>')
+def pref(key, value):
+    """Set user preference."""
+    if 'user_id' not in session:
+        abort(401)
+
+    if not g.prefs.has_key(key):
+        return render_template('home.html', error = "No such preference: %s" % key)
+
+    g.db.execute('update prefs set new_window = ? where user_id = ?', [ value, session['user_id'] ])
+    g.db.commit()
+    flash("Preferences updated.")
     return redirect(url_for('home'))
 
 @app.route('/login', methods=['GET', 'POST'])

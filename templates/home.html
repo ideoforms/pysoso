@@ -44,12 +44,19 @@
 	{% endif %}
 
 	{% if stale or bookmarks %}
-	<h2>Controls</h2>
-	<div class="controls">
-		<a href="#" id="edit">edit bookmarks</a> |
-		mark all as:
+	<div id="controls">
+	<h2>Controls <a class="active bookmarks_show" href="#"><img src="{{ url_for("static", filename = "icon/magnify.png") }}" alt="show" width="12" height="12" class="icon" /></a></h2>
+	<ul>
+		<li><a href="#" id="edit">edit bookmarks</a><br >
+		<li>mark all as:
 		<a href="{{ url_for("mark", value = 0) }}" id="mark_fresh">fresh</a>,
-		<a href="{{ url_for("mark", value = 1) }}" id="mark_stale">stale</a>
+		<a href="{{ url_for("mark", value = 1) }}" id="mark_stale">stale</a><br />
+		<li>bookmarks open in
+		{% if g.prefs["new_window"] %}new tab{% else %}current tab{% endif %}.<br />
+		<a href="{{ url_for("pref", key = "new_window", value = 1 - g.prefs["new_window"]) }}">open in
+		{% if g.prefs["new_window"] %}current tab{% else %}new tab{% endif %}.
+		</a>
+	</ul>
 	</div>
 	{% endif %}
 	</div>
