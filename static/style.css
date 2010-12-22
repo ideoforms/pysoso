@@ -120,7 +120,7 @@ input, textarea
 .body, .flash, .error
 {
 	background: #f3f3f3;
-	background: #f3f3f3 url("/pysoso/static/icon/gradient.png") repeat-y;
+	background: #f3f3f3 url("icon/gradient.png") repeat-y;
 	padding: 32px;
 	width: 500px;
 	-moz-border-radius: 24px;
@@ -161,7 +161,7 @@ input, textarea
 
 #bookmarks .tools
 {
-	visibility: hidden;
+	display: none;
 	margin: 0 4px;
 }
 #bookmarks .visible
@@ -171,7 +171,26 @@ input, textarea
 
 #bookmarks h2
 {
-	background: #f3f3f3 url("/pysoso/static/icon/gradient-dark.png") repeat-y !important;
+	background: #f3f3f3 url("icon/gradient-dark.png") repeat-y !important;
+	background: #eee;
+	-moz-border-radius: 24px 8px 0 0 ;
+	padding: 12px 12px 6px 24px;
+	margin: -32px -32px 24px -32px;
+	color: #9ab;
+	font-size: 120%;
+}
+
+#bookmarks h2 a
+{
+	float: right;
+	position: relative;
+	top: -4px;
+	color: #aaa;
+}
+
+#bookmarks_active, #bookmarks_stale
+{
+	margin-bottom: 44px;
 }
 
 #bookmarks_active ul

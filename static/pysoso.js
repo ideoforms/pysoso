@@ -17,29 +17,29 @@ $(function()
 		if ($(this).hasClass("active"))
 		{
 			$(this).removeClass("active");
-			$("#bookmarks .tools").removeClass("visible");
+			$("#bookmarks .tools").hide();
 		}
 		else
 		{
 			$(this).addClass("active");
-			$("#bookmarks .tools").addClass("visible");
+			$("#bookmarks .tools").show();
 		}
 		return false;
 	});
 
-	$('#bookmarks_show').bind('click', function () {
-		if ($(this).hasClass("active"))
+	$('.bookmarks_show').bind('click', function () {
+		var ul = $(this).parents("div").children("ul");
+		if (ul.is(":visible"))
 		{
+			ul.hide("fast");
 			$(this).removeClass("active");
-			$("#bookmarks_stale .subtitle").show("slow");
-			$("#bookmarks_stale ul").hide("slow");
 		}
 		else
 		{
+			ul.show("fast");
 			$(this).addClass("active");
-			$("#bookmarks_stale .subtitle").hide("slow");
-			$("#bookmarks_stale ul").show("slow");
 		}
+
 		return false;
 	});
 
@@ -73,5 +73,6 @@ $(function()
 	$('#bookmarks .bookmark').bind('click', function () {
 		$(this).parents("li").hide("slow");
 	});
+
 
 });
