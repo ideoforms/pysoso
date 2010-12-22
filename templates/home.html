@@ -8,9 +8,9 @@
 
 <div class="body">
 	<div id="bookmarks">
-
+ <span class="color: #bcd" fresh fresh fresh fresh</span>
 	<div id="bookmarks_active">
-		<h2>Fresh</h2>
+		<h2 style="font-size: 150%; background: #eee; -moz-border-radius: 24px 24px 0 0 ; padding: 18px 24px 12px; margin: -32px -32px 24px -32px; color: #9ab; letter-spacing: 0.0em;">Fresh</h2>
 		<ul>
 		{% if bookmarks %}
 		{% for bookmark in bookmarks %}
@@ -31,7 +31,7 @@
 	<hr />
 
 	<div id="bookmarks_stale">
-		<h2>Stale <a href="#" id="bookmarks_show"><img src="{{ url_for("static", filename = "icon/magnify.png") }}" alt="show" width="12" height="12" class="icon" /></a></h2>
+		<h2 style="font-size: 150%; background: #eee; padding: 24px; margin: 0 -32px 32px; color: #9ab; letter-spacing: 0.0em">Stale <a href="#" id="bookmarks_show"><img src="{{ url_for("static", filename = "icon/magnify.png") }}" alt="show" width="12" height="12" class="icon" /></a></h2>
 		<ul class="nodisplay">
 		{% if stale %}
 		{% for bookmark in stale %}
@@ -41,6 +41,7 @@
 			<li style="margin-left: 32px"><i>sorry, no stale bookmarks right now</i></li>
 		{% endif %}
 		</ul>
+		<p class="subtitle"><small>(hidden)</small></p>
 	</div>
 	{% endif %}
 

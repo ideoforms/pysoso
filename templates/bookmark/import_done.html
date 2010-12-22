@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block title %}Import Bookmarks{% endblock %}
+{% block body %}
+
+<div class="body">
+	<h2>Import Bookmarks</h2>
+	<p>
+	i successfully imported a total of <b>{{ bookmarks_imported|length }}</b> bookmarks.<br />
+	importing <b>{{ bookmarks_failed|length }}</b> bookmarks failed.
+	</p>
+	<hr />
+	<h3>imports successful</h3>
+	{% if bookmarks_imported %}
+	<ul>
+		{% for bookmark in bookmarks_imported %}
+		<li>{{ bookmark.title }}</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+	{% if bookmarks_failed %}
+	<h3>imports failed</h3>
+	<ul>
+		{% for bookmark in bookmarks_failed %}
+		<li>{{ bookmark.title }}</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+</div>
+
+{% endblock %}
+

@@ -31,17 +31,16 @@ $(function()
 		if ($(this).hasClass("active"))
 		{
 			$(this).removeClass("active");
-			// $(this).text("show");
-			// $("#bookmarks_stale ul").addClass("nodisplay");
+			$("#bookmarks_stale .subtitle").show("slow");
 			$("#bookmarks_stale ul").hide("slow");
 		}
 		else
 		{
 			$(this).addClass("active");
-			// $(this).text("hide");
-			// $("#bookmarks_stale ul").removeClass("nodisplay");
+			$("#bookmarks_stale .subtitle").hide("slow");
 			$("#bookmarks_stale ul").show("slow");
 		}
+		return false;
 	});
 
 	$('#bookmarks .edit').bind('mouseover', function () {

@@ -39,7 +39,7 @@ def main():
         db.commit()
 
     except sqlite3.Error, e:
-        print "An error occurred:", e.args[0]
+        sys.stderr.write("An error occurred: %s\n" % e.args[0])
 
 if __name__ == "__main__":
     main()

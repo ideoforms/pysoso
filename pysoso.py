@@ -31,8 +31,8 @@ from werkzeug import check_password_hash, generate_password_hash
 # configuration
 # DATABASE = 'pysoso.db'
 # DATABASE = '/var/www/vhosts/ideoforms.com/apps/pysoso/pysoso.db'
-DATABASE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "pysoso.db")
-# DATABASE = '/var/www/vhosts/ideoforms.com/apps/pysoso/pysoso.db'
+# DATABASE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "pysoso.db")
+DATABASE = '/var/www/vhosts/ideoforms.com/apps/pysoso/pysoso.db'
 PER_PAGE = 30
 DEBUG = True
 SECRET_KEY = 'development key'
@@ -98,8 +98,10 @@ def format_timeago(timestamp):
     elif elapsed > 10:
         seconds = int(elapsed)
         return "%d %s ago" % (seconds, "second" if seconds == 1 else "seconds")
-    else:
+    elif elapsed > 0:
         return "a few seconds ago"
+    else:
+        return "in the future"
 
 @app.before_request
 def before_request():

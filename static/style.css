@@ -27,6 +27,7 @@ a
 {
 	text-decoration: none;
 	color: #b43;
+	color: #25c;
 }
 a:hover
 {
@@ -118,7 +119,8 @@ input, textarea
 
 .body, .flash, .error
 {
-	background: #eee;
+	background: #f3f3f3;
+	background: #f3f3f3 url("/pysoso/static/icon/gradient.png") repeat-y;
 	padding: 32px;
 	width: 500px;
 	-moz-border-radius: 24px;
@@ -132,6 +134,17 @@ input, textarea
 	text-transform: lowercase;
 }
 
+.bookmark
+{
+	display: block;
+	margin-left: 36px;
+}
+
+.bookmark .link
+{
+	line-height: 1.1em;
+}
+
 #bookmarks ul
 {
 	margin: 0;
@@ -140,9 +153,9 @@ input, textarea
 
 #bookmarks li
 {
-	color: #888;
+	color: #aaa;
 	list-style: none;
-	margin: 0;
+	margin: 0 0 0 0px;
 	padding: 0 0px;
 }
 
@@ -156,37 +169,51 @@ input, textarea
 	visibility: visible !important;
 }
 
+#bookmarks h2
+{
+	background: #f3f3f3 url("/pysoso/static/icon/gradient-dark.png") repeat-y !important;
+}
+
 #bookmarks_active ul
 {
 	font-size: 120%;
 }
 
-#bookmarks_active li
-{
-}
 
 #bookmarks_active li
 {
 	display: block;
-	margin-left: 0px;
-	margin-bottom: 12px;
+	margin-bottom: 2px;
 }
 #bookmarks_active .tools
 {
 	width: 28px;
-	height: 28px;
+	height: 50px;
 	float: left;
 	position: relative;
-	top: 2px;
+	top: 8px;
 	left: -4px;
 	line-height: 20px;
 }
 
-#bookmarks_active .bookmark
+#bookmarks_active .link
 {
 	font-size: 200%;
 	display: block;
-	margin-bottom: 4px;
+	padding: 2px 0;
+	-moz-border-radius: 24px;
+	border-radius: 24px;
+}
+
+#bookmarks_active .link:hover
+{
+	background: #eee;
+}
+
+#bookmarks_active .freshness
+{
+	position: relative;
+	top: -0.4em;
 }
 
 #bookmarks_stale ul
@@ -216,6 +243,7 @@ input, textarea
 .subtitle
 {
 	margin-top: -1.5em;
+	color: #999;
 }
 
 .flash, .error

@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block title %}Lost Password{% endblock %}
+{% block body %}
+
+<div class="body">
+	<h2>Lost Password</h2>
+	<p>lost your password? enter your username, and we will send you a new one.</p>
+	<form action="" method="post">
+		<dl>
+			<dt>username:
+			<dd><input type="text" name="username" size="30" value="{{ request.form.username }}">
+		</dl>
+		<div class="actions"><input type="submit" value="Send"></div>
+	</form>
+</div>
+
+{% endblock %}

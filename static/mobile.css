@@ -18,6 +18,10 @@ body
 	display: inline;
 	margin-right: 2em;
 }
+#nav_admin
+{
+	display: none;
+}
 
 dd, dt
 {
@@ -29,5 +33,14 @@ dd, dt
 {
 	margin: 0;
 	width: 100%;
+	background: transparent;
 }
 
+#bookmarks .tools
+{
+	display: none;
+}
+
+.bookmark
+{
+}

@@ -8,6 +8,7 @@
 	{% endif %}
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='pysoso.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='auto/jquery.autocomplete.js') }}"></script>
 	
 </head>
 <body>
@@ -21,11 +22,14 @@
 			<li><a href="{{ url_for('about') }}">about</a></li>
 		{% if g.user %}
 		</ul>
-			<p>logged in as <strong>{{ g.user.username }}</strong></p>
+		<div id="nav_admin">
+		<p>logged in as <strong>{{ g.user.username }}</strong></p>
 		<ul>
 			<li><a href="{{ url_for('bookmark_import') }}">import</a></li>
 			<li><a href="{{ url_for('bookmark_export') }}">export</a></li>
 			<li><a href="{{ url_for('logout') }}">sign out</a></li>
+		</ul>
+		</div>
 		{% else %}
 			<li><a href="{{ url_for('register') }}">sign up</a></li>
 			<li><a href="{{ url_for('login') }}">sign in</a></li>

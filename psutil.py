@@ -3,10 +3,11 @@ import time
 import urllib2
 import urlparse
 import feedparser
-# import lxml.html
+import lxml.html
 import email.utils
 import sqlite3
 import xml.dom.minidom
+from BeautifulSoup import BeautifulStoneSoup
 
 def useragent_is_mobile(ua):
     mobile_agents = [
@@ -68,7 +69,7 @@ def feed_modified(url, lastmod = 0, etag = None):
             stamp['modified'] = stamp['rebuilt'] = date_from_rfc2822(lastmod)
 
         if data.feed.has_key('lastbuilddate'):
-            stamp['rebuilt'] = date_from_rfc2822(data.feed.lastbuilddate)
+            stamp['modified'] = stamp['rebuilt'] = date_from_rfc2822(lastmod)
 
         if len(data.entries) > 0:
             # print "0th: %s" % data.entries[0]
@@ -76,6 +77,8 @@ def feed_modified(url, lastmod = 0, etag = None):
                 stamp['modified'] = int(time.mktime(data.entries[0].updated_parsed))
                 if not stamp.has_key('rebuilt'):
                     stamp['rebuilt'] = stamp['modified']
+
+        # what to do if the feed does not have a modified date?
 
         return stamp
     
@@ -118,7 +121,7 @@ def feed_bookmark(db, user_id, feed_url, feed_rss, feed_title):
 
     try:
         c.execute('insert or replace into bookmark (user_id, feed_id, title, created, stale) values (?, ?, ?, ?, ?)',
-            (user_id, feed_id, feed_title, int(time.time()), True))
+            (user_id, feed_id, feed_title, int(time.time()), False))
         db.commit()
     except sqlite3.Error, e:
         print "An error occurred:", e.args[0]
@@ -141,6 +144,7 @@ def parse_opml(data):
             "rss": node.attributes["xmlUrl"].value,
             "title": node.attributes["title"].value
         }
+        bookmark["title"] = unicode(BeautifulStoneSoup(bookmark["title"], convertEntities = BeautifulStoneSoup.HTML_ENTITIES))
         bookmarks.append(bookmark)
 
     return bookmarks
