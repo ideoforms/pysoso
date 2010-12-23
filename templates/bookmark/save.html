@@ -5,6 +5,7 @@
 <div class="body">
 	<h2>Save Bookmark</h2>
 	<form action="{{ url_for('bookmark_save') }}" method="post">
+		<input type="hidden" name="id" value="{{ bookmark["bookmark_id"] }}" />
 		<dl>
 			<dt>Title:
 			<dd><input type="text" name="title" size="50" value="{{ bookmark["title"] }}">

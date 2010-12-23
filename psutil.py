@@ -30,10 +30,8 @@ def useragent_is_mobile(ua):
     
     for agent in mobile_agents:
         if re.search(agent, ua):
-            print "found %s in %s" % (agent, ua)
             return True
 
-    print "not found"
     return False
 
 def feed_modified(url, lastmod = 0, etag = None):
@@ -104,27 +102,36 @@ def feed_detect(url):
 
     return feed_url
 
-def feed_bookmark(db, user_id, feed_url, feed_rss, feed_title):
+def save_bookmark(db, user_id, bookmark):
+    """Store a bookmark."""
     c = db.cursor()
-    feed_id = c.execute('select feed_id from feed where rss = ?', [ feed_rss ]).fetchone()
+    feed_id = c.execute('select feed_id from feed where rss = ?', [ bookmark["rss"] ]).fetchone()
+
+    if not bookmark.has_key("bookmark_id"):
+        bookmark["bookmark_id"] = None
+
     if feed_id:
-        feed_id = feed_id[0]
+        bookmark["feed_id"] = feed_id[0]
     else:
-        stamp = feed_modified(feed_rss)
+        stamp = feed_modified(bookmark["rss"])
         if not stamp:
             raise Exception, "Invalid feed"
 
         c.execute('insert into feed (url, rss, added, rebuilt, modified, etag) values (?, ?, ?, ?, ?, ?)',
-            (feed_url, feed_rss, int(time.time()), stamp['rebuilt'], stamp['modified'], stamp['etag']))
-        feed_id = c.lastrowid
-        print "(created) id: %s" % feed_id
+            (bookmark["url"], bookmark["rss"], int(time.time()), stamp['rebuilt'], stamp['modified'], stamp['etag']))
+        bookmark["feed_id"] = c.lastrowid
 
     try:
-        c.execute('insert or replace into bookmark (user_id, feed_id, title, created, stale) values (?, ?, ?, ?, ?)',
-            (user_id, feed_id, feed_title, int(time.time()), False))
+        c.execute('insert or replace into bookmark (bookmark_id, user_id, feed_id, title, created, stale) values (?, ?, ?, ?, ?, ?)',
+            (bookmark["bookmark_id"], user_id, bookmark["feed_id"], bookmark["title"], int(time.time()), False))
+        bookmark["bookmark_id"] = c.lastrowid
+
+        db.execute("delete from tag where bookmark_id = ?", [ bookmark["bookmark_id"] ])
+        for tag in bookmark['tags']:
+            db.execute("insert into tag (bookmark_id, tag) values (?, ?)", [ bookmark["bookmark_id"], tag ])
         db.commit()
 
-        return c.lastrowid
+        return bookmark["bookmark_id"]
 
     except sqlite3.Error, e:
         print "An error occurred:", e.args[0]
@@ -142,7 +149,7 @@ def parse_opml(data):
         category_name = category_node.attributes["title"].value if category_node.attributes else None
         # print " - parse: %s - %s" % (category_name, node.attributes["title"].value)
         bookmark = {
-            "category": category_name,
+            "tags": [ category_name ] if category_name else [],
             "url": node.attributes["htmlUrl"].value,
             "rss": node.attributes["xmlUrl"].value,
             "title": node.attributes["title"].value

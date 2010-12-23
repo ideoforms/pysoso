@@ -170,7 +170,7 @@ input, textarea
 	visibility: visible !important;
 }
 
-#bookmarks h2
+#bookmarks h2, #controls h2
 {
 	background: #f3f3f3 url("icon/gradient-dark.png") repeat-y !important;
 	background: #eee;
@@ -179,10 +179,10 @@ input, textarea
 	padding: 12px 12px 6px 24px;
 	margin: -32px -32px 24px -32px;
 	color: #9ab;
-	font-size: 120%;
+	font-size: 150%;
 }
 
-#bookmarks .bookmarks_show
+.bookmarks_show
 {
 	float: right;
 	position: relative;
@@ -190,13 +190,25 @@ input, textarea
 	color: #aaa;
 }
 
+#bookmarks .tags
+{
+	font-size: 65%;
+	padding-left: 1em;
+	margin-left: 2em;
+	color: #d0d0d0;
+}
+
 #bookmarks .tag_show
 {
-	font-size: 90%;
-	color: #ccc;
+	color: #c0c8d0;
 	padding: 2px 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
+}
+#bookmarks .tag_show:hover
+{
+	background: #c0c8d0;
+	color: #fff;
 }
 #bookmarks .tag_show.active
 {
@@ -325,4 +337,9 @@ input, textarea
 .nodisplay
 {
 	display: none;
+}
+
+.light
+{
+	color: #ddd;
 }

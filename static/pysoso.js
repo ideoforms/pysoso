@@ -13,12 +13,13 @@ $(function()
 	});
 
 	$('html').keypress(function(event) {
-  		if (event.which == '101') {
+  		if (event.which == 99)
+			$('#controls .bookmarks_show').click();
+  		if (event.which == 101)
 			$('a#edit').click();
-		}
-		else if (event.which = 110)
-		{
-		}
+		// else if (event.which = 110)
+		else if (event.which == 115)
+			$('#bookmarks_stale .bookmarks_show').click();
 	});
 
 	$('a#edit').bind('click', function () {
@@ -71,34 +72,34 @@ $(function()
 	});
 
 	$('#bookmarks .edit').bind('mouseover', function () {
-		var el = $(this).parents("li").children(".bookmark")[0];
-		el.style.textDecoration = "underline";
+		var el = $(this).parents("li").find(".link");
+		el[0].style.textDecoration = "underline";
 	});
 
 	$('#bookmarks .edit').bind('mouseout', function () {
-		var el = $(this).parents("li").children(".bookmark")[0];
-		el.style.textDecoration = "none";
+		var el = $(this).parents("li").find(".link");
+		el[0].style.textDecoration = "none";
 	});
 
 	$('#bookmarks .delete').bind('mouseover', function () {
-		var el = $(this).parents("li").children(".bookmark")[0];
-		el.style.textDecoration = "line-through";
+		var el = $(this).parents("li").find(".link");
+		el[0].style.textDecoration = "line-through";
 	});
 
 	$('#bookmarks .delete').bind('mouseout', function () {
-		var el = $(this).parents("li").children(".bookmark")[0];
-		el.style.textDecoration = "none";
+		var el = $(this).parents("li").find(".link");
+		el[0].style.textDecoration = "none";
 	});
 
 
 	$('#bookmarks .delete').bind('click', function () {
-		$(this).parents("li").hide("slow");
+		$(this).parents("li").hide("fast");
 		$.getJSON($(this).attr("href"));
 		return false;
 	});
 
 	$('#bookmarks .bookmark').bind('click', function () {
-		$(this).parents("li").hide("slow");
+		$(this).parents("li").hide("fast", function () { $(this).remove(); });
 	});
 
 

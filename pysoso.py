@@ -89,7 +89,7 @@ def process_bookmarks(bookmark_tags):
     return bookmarks
 
 def get_bookmark(bookmark_id):
-    bookmark_tags = query_db("select feed.*, bookmark.*, tag.tag from feed, bookmark, user left join tag on tag.bookmark_id = bookmark.bookmark_id where feed.feed_id = bookmark.feed_id and bookmark.bookmark_id = ? order by modified desc", [ bookmark_id ])
+    bookmark_tags = query_db("select feed.*, bookmark.*, tag.tag from feed, bookmark left join tag on tag.bookmark_id = bookmark.bookmark_id where feed.feed_id = bookmark.feed_id and bookmark.bookmark_id = ? order by modified desc", [ bookmark_id ])
     return process_bookmarks(bookmark_tags)[0]
 
 def get_bookmarks_for_user(user_id):
@@ -167,7 +167,7 @@ def home():
 
     # stale = query_db("select feed.*, bookmark.*, user.* from feed, bookmark, user where bookmark.user_id = user.user_id and bookmark.stale and feed.feed_id = bookmark.feed_id and user.user_id = ? order by modified desc", [ session['user_id'] ])
 
-    tags = query_db("select tag from tag, bookmark, user where bookmark.user_id = 1 and bookmark.user_id = user.user_id and tag.bookmark_id = bookmark.bookmark_id and user.user_id = ? group by tag", [ session['user_id'] ])
+    tags = query_db("select tag from tag, bookmark, user where bookmark.user_id = user.user_id and tag.bookmark_id = bookmark.bookmark_id and user.user_id = ? group by tag", [ session['user_id'] ])
     tags = map(lambda n: n["tag"], tags)
 
     return render_template('home.html', bookmarks = bookmarks, stale = stale, tags = tags)
@@ -224,23 +224,23 @@ def bookmark_save():
 
     if request.form['title']:
         bookmark = {
+            'bookmark_id' : request.form['id'] if request.form['id'] else None,
             'rss' : request.form['rss'],
             'url' : request.form['url'],
             'title' : request.form['title'],
             'tags' : map(lambda n: n.rstrip(","), request.form['tags'].split())
         }
         feed_id = 0
+        seen = []
         for tag in bookmark['tags']:
             if not re.search("^[a-zA-Z0-9_-]+$", tag):
                 return render_template('bookmark/save.html', error = "Invalid tag: %s" % tag, bookmark = bookmark)
+            if tag in seen:
+                return render_template('bookmark/save.html', error = "Tag repeated: %s" % tag, bookmark = bookmark)
+            seen.append(tag)
 
-        print "saving with id %d" % session['user_id']
         try:
-            bookmark_id = psutil.feed_bookmark(g.db, session['user_id'], bookmark['url'], bookmark['rss'], bookmark['title'])
-            g.db.execute("delete from tag where bookmark_id = ?", [ bookmark_id ])
-            for tag in bookmark['tags']:
-                g.db.execute("insert into tag (bookmark_id, tag) values (?, ?)", [ bookmark_id, tag ])
-            g.db.commit()
+            bookmark_id = psutil.save_bookmark(g.db, session['user_id'], bookmark)
 
         except Exception, e:
             return render_template('bookmark/save.html', error = "Sorry, something went wrong whilst saving this bookmark. Please check that the feed URL is correct. (%s)" % e, bookmark = bookmark)
@@ -294,7 +294,7 @@ def bookmark_import():
     for bookmark in bookmarks:
         bookmark["imported"] = False
         try:
-            psutil.feed_bookmark(g.db, session["user_id"], bookmark["url"], bookmark["rss"], bookmark["title"])
+            psutil.save_bookmark(g.db, session["user_id"], bookmark)
             bookmark["imported"] = True
         except Exception, e:
             bookmark["exception"] = e

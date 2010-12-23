@@ -8,11 +8,19 @@
 <div class="body">
 	<div id="bookmarks">
 	<div id="bookmarks_active">
-		<h2>Fresh
-			{% for tag in tags %}
-			<a class="tag_show" title="{{ tag }}" href="#">{{ tag }}</a>
-			{% endfor %}
+		<h2><span style="float: left; margin-right: 1.5em">Fresh</span>
+			{% if tags %}
+			<span class="tags">
+				<!-- <i style="float: left; margin-right: 1em">tags:</i> -->
+				<div style="float: left; width: 400px; line-height: 1.4em">
+				{% for tag in tags %}
+				<a class="tag_show" title="{{ tag }}" href="#">{{ tag }}</a>
+				{% endfor %}
+				</div>
+			</span>
+			{% endif %}
 			<a class="active bookmarks_show" href="#"><img src="{{ url_for("static", filename = "icon/magnify.png") }}" alt="show" width="12" height="12" class="icon" /></a>
+			<div style="clear: both;"> </div>
 		</h2>
 		<ul>
 		{% if bookmarks %}
@@ -28,7 +36,7 @@
 			</i></li>
 		{% endif %}
 		</ul>
-	</div>
+	</div> <!-- #bookmarks_active -->
 
 	{% if stale %}
 
@@ -43,8 +51,11 @@
 			<li style="margin-left: 32px"><i>sorry, no stale bookmarks right now</i></li>
 		{% endif %}
 		</ul>
-	</div>
+	</div> <!-- #bookmarks_stale -->
+
 	{% endif %}
+
+	</div> <!-- #bookmarks -->
 
 	{% if stale or bookmarks %}
 	<div id="controls">
@@ -60,9 +71,8 @@
 		{% if g.prefs["new_window"] %}current tab{% else %}new tab{% endif %}.
 		</a>
 	</ul>
-	</div>
+	</div> <!-- #controls -->
 	{% endif %}
-	</div>
 
 </div>
 

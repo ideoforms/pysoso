@@ -22,6 +22,7 @@
 	<ul>
 		{% for bookmark in bookmarks_failed %}
 		<li>{{ bookmark.title }}</li>
+		<!-- {{ bookmark.exception }} -->
 		{% endfor %}
 	</ul>
 	{% endif %}
