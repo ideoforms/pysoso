@@ -64,8 +64,9 @@ $(function()
 		}
 		else
 		{
-			var tag = $(this).attr("title");
-			var li = $(this).parents("#bookmarks").find("li[tags~=" + tag + "]");
+			var tag = $(this).attr("text");
+			var li = $("#bookmarks").find("li[tags~=" + tag + "]");
+			document.title = "showing " + li.length;
 			li.show();
 			li = $(this).parents("#bookmarks").find("li:not([tags~=" + tag + "])");
 			li.hide();
