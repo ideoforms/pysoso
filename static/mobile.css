@@ -43,10 +43,12 @@ dd, dt
 #bookmarks .tools
 {
 	display: none;
+	width: 44px;
 }
 
 .bookmark
 {
+	margin-left: 20px;
 }
 
 .icon

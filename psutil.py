@@ -7,25 +7,29 @@ import lxml.html
 import email.utils
 import sqlite3
 import xml.dom.minidom
+import smtplib
+import random
+import string
+from email.mime.text import MIMEText
 from BeautifulSoup import BeautifulStoneSoup
 
 def useragent_is_mobile(ua):
     mobile_agents = [
-        "iPhone",                
-        "iPod",                      
-        "Android",           
-        "dream",                 
-        "CUPCAKE",           
-        "blackberry9500",    
-        "blackberry9530",    
-        "blackberry9520",    
-        "blackberry9550",    
-        "blackberry 9800",   
-        "webOS",                 
-        "incognito",             
-        "webmate",           
-        "s8000",                 
-        "bada"                   
+        "iPhone",
+        "iPod",
+        "Android",
+        "dream",
+        "CUPCAKE",
+        "blackberry9500",
+        "blackberry9530",
+        "blackberry9520"
+        "blackberry9550",
+        "blackberry 9800",
+        "webOS",
+        "incognito",
+        "webmate",
+        "s8000",
+        "bada"
     ]
     
     for agent in mobile_agents:
@@ -33,6 +37,16 @@ def useragent_is_mobile(ua):
             return True
 
     return False
+
+def send_email(text, you, me, subject):
+    msg = MIMEText(text)
+    msg['To'] = you
+    msg['From'] = me
+    msg['Subject'] = subject
+
+    s = smtplib.SMTP("localhost")
+    s.sendmail(me, [you], msg.as_string())
+    s.quit()
 
 def feed_modified(url, lastmod = 0, etag = None):
     """ given a feed URL and lastmod date in seconds since epoch (UTC),
@@ -181,3 +195,9 @@ def date_from_rfc2822(string):
 
 def date_ago():
    return 0
+
+def generate_password(length = 10):
+    """Generate a random alphanumeric password."""
+    chars = string.letters + string.digits
+    password = "".join([ random.choice(chars) for n in range(length) ])
+    return password

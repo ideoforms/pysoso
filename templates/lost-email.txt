@@ -1,0 +1,13 @@
+dear {{ user.username }},
+
+your pysoso password has been reset to:
+
+	{{ password }}
+
+now, please log in and change it to something else:
+
+	{{ url_for("login", _external = True) }}
+
+
+yours,
+pysoso

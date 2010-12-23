@@ -416,10 +416,19 @@ def lost():
     if request.method == 'GET' or not request.form['username']:
         return render_template("lost.html")
     else:
-        rv = g.db.execute('select * from user where username = ?',
-             [ request.form['username'] ]).fetchone()
-        if not rv:
+        user = query_db('select * from user where username = ?',
+             [ request.form['username'] ], one = True)
+        if not user:
             return render_template("lost.html", error = "sorry, couldn't find that username.")
+
+        password = psutil.generate_password()
+        hash = generate_password_hash(password)
+
+        g.db.execute("update user set pw_hash = ? where user_id = ?", [ hash, user["user_id"] ])
+        g.db.commit()
+
+        email = render_template("lost-email.txt", user = user, password = password)
+        psutil.send_email(email, user["email"], 'pysoso@ideoforms.com', "pysoso: lost password")
 
         flash("a new password has been sent out. it should be with you within a few minutes.")
         return render_template("lost.html")

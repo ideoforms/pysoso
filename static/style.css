@@ -166,13 +166,9 @@ input, textarea
 	list-style-type: none;
 	margin: 0 0 0 0px;
 	padding: 0 0px;
+	clear: both;
 }
 
-#bookmarks .tools
-{
-	display: none;
-	margin: 0 4px;
-}
 #bookmarks .visible
 {
 	visibility: visible !important;
@@ -242,6 +238,8 @@ input, textarea
 }
 #bookmarks .tools
 {
+	display: none;
+	margin: 0 4px;
 	width: 28px;
 	float: left;
 	position: relative;
@@ -273,9 +271,6 @@ input, textarea
 	top: -0.4em;
 }
 
-#bookmarks_stale ul
-{
-}
 
 #bookmarks_stale .freshness
 {
