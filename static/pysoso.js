@@ -12,7 +12,11 @@ $(function()
 		return false;
 	});
 
-	$('html').keypress(function(event) {
+	$('html').keypress(function(event)
+	{
+		if (event.target.tagName == "INPUT")
+			return;
+
   		if (event.which == 99)
 			$('#controls .bookmarks_show').click();
   		if (event.which == 101)
