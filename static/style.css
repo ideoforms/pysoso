@@ -51,6 +51,14 @@ h1
 h1 a
 {
 	color: #333;
+	padding: 4px 24px 12px;
+	margin: -4px -24px -12px;
+	-moz-border-radius: 24px;
+	border-radius: 24px;
+}
+h1 a:hover
+{
+	background: #f3f3f3;
 }
 h2
 {

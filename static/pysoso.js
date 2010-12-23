@@ -17,13 +17,28 @@ $(function()
 		if (event.target.tagName == "INPUT")
 			return;
 
+		// c: show/hide controls
   		if (event.which == 99)
 			$('#controls .bookmarks_show').click();
-  		if (event.which == 101)
+
+		// e: toggle editing
+  		else if (event.which == 101)
 			$('a#edit').click();
-		// else if (event.which = 110)
+
+		// f: toggle fresh bookmarks
+		else if (event.which == 102)
+			$('#bookmarks_active .bookmarks_show').click();
+
+		// s: toggle stale bookmarks
 		else if (event.which == 115)
 			$('#bookmarks_stale .bookmarks_show').click();
+
+		// 1..9: toggle tags
+		else if (event.which >= 49 && event.which <= 57)
+		{
+			index = event.which - 49 + 1;
+			tags = $(".tags a:nth-child(" + index + ")").click();
+		}
 	});
 
 	$('a#edit').bind('click', function () {

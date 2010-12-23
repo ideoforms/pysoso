@@ -13,13 +13,15 @@
 			<span class="tags">
 				<!-- <i style="float: left; margin-right: 1em">tags:</i> -->
 				<div style="float: left; width: 400px; line-height: 1.4em">
+				{% set i = 1 %}
 				{% for tag in tags %}
-				<a class="tag_show" title="{{ tag }}" href="#">{{ tag }}</a>
+				<a class="tag_show" title="{{ tag }} ({{ i }})" href="#">{{ tag }}</a>
+				{% set i = i + 1 %}
 				{% endfor %}
 				</div>
 			</span>
 			{% endif %}
-			<a class="active bookmarks_show" href="#"><img src="{{ url_for("static", filename = "icon/magnify.png") }}" alt="show" width="12" height="12" class="icon" /></a>
+			<a class="active bookmarks_show" title="show/hide fresh (f)" href="#"><img src="{{ url_for("static", filename = "icon/magnify.png") }}" alt="show/hide fresh (f)" width="12" height="12" class="icon" /></a>
 			<div style="clear: both;"> </div>
 		</h2>
 		<ul>
@@ -41,7 +43,7 @@
 	{% if stale %}
 
 	<div id="bookmarks_stale">
-		<h2>Stale <a href="#" class="bookmarks_show"><img src="{{ url_for("static", filename = "icon/magnify.png") }}" alt="show" width="12" height="12" class="icon" /></a></h2>
+		<h2>Stale <a href="#" title="show/hide fresh (s)" class="bookmarks_show"><img src="{{ url_for("static", filename = "icon/magnify.png") }}" alt="show/hide stale (s)" width="12" height="12" class="icon" /></a></h2>
 		<ul class="nodisplay">
 		{% if stale %}
 		{% for bookmark in stale %}
@@ -59,9 +61,9 @@
 
 	{% if stale or bookmarks %}
 	<div id="controls">
-	<h2>Controls <a class="active bookmarks_show" href="#"><img src="{{ url_for("static", filename = "icon/magnify.png") }}" alt="show" width="12" height="12" class="icon" /></a></h2>
+	<h2>Controls <a class="active bookmarks_show" title="show/hide controls (c)" href="#"><img src="{{ url_for("static", filename = "icon/magnify.png") }}" alt="show/hide controls (c)" width="12" height="12" class="icon" /></a></h2>
 	<ul>
-		<li><a href="#" id="edit">edit bookmarks</a><br >
+		<li><a href="#" id="edit" title="edit bookmarks (e)">edit bookmarks</a><br >
 		<li>mark all as:
 		<a href="{{ url_for("mark", value = 0) }}" id="mark_fresh">fresh</a>,
 		<a href="{{ url_for("mark", value = 1) }}" id="mark_stale">stale</a><br />
