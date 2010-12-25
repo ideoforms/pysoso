@@ -15,6 +15,7 @@ import time
 
 import psutil
 import werkzeug
+import urlparse
 import sys
 import os
 import re
@@ -38,13 +39,8 @@ PER_PAGE = 30
 DEBUG = True
 SECRET_KEY = 'development key'
 
-# create our little application :)
 app = Flask(__name__)
 app.config.from_object(__name__)
-# app.url_map.converters['default'] = werkzeug.routing.PathConverter
-# app.url_map.converters['string'] = werkzeug.routing.PathConverter
-# app.url_map.converters['any'] = werkzeug.routing.PathConverter
-
 
 def connect_db():
     """Returns a new connection to the database."""
@@ -193,13 +189,20 @@ def bookmark_lookup():
     if 'user_id' not in session:
         abort(401)
 
-    if request.method == "GET":
+    if not request.values.has_key('url') or not request.values['url']:
+        print "rendered"
         return render_template('bookmark/add.html')
-        
-    url = request.form['url']
 
-    if not url:
-        return render_template('bookmark/add.html')
+    url = request.values['url']
+    url_bits = urlparse.urlparse(url)
+    url_host = url_bits[1].lstrip("www.")
+
+    flask_base = url_for("home", _external = True)
+    flask_base_bits = urlparse.urlparse(flask_base)
+    flask_base_host = flask_base_bits[1].lstrip("www.")
+
+    if (url_host == flask_base_host):
+        return render_template('bookmark/add.html', error = "Sorry, I can't add myself as a feed.")
 
     url = psutil.url_sanify(url)
 

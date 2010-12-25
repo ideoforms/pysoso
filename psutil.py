@@ -139,6 +139,7 @@ def save_bookmark(db, user_id, bookmark):
         c.execute('insert or replace into bookmark (bookmark_id, user_id, feed_id, title, created, stale) values (?, ?, ?, ?, ?, ?)',
             (bookmark["bookmark_id"], user_id, bookmark["feed_id"], bookmark["title"], int(time.time()), False))
         bookmark["bookmark_id"] = c.lastrowid
+        db.commit()
 
         db.execute("delete from tag where bookmark_id = ?", [ bookmark["bookmark_id"] ])
         for tag in bookmark['tags']:
