@@ -71,6 +71,7 @@ def feed_modified(url, lastmod = 0, etag = None):
 
         body = response.read()
         data = feedparser.parse(body)
+        print "parsed: %s" % data.feed.keys()
         stamp['title'] = data.feed.title
         stamp['link'] = data.feed.link
         stamp['modified'] = None
@@ -81,10 +82,9 @@ def feed_modified(url, lastmod = 0, etag = None):
             stamp['modified'] = stamp['rebuilt'] = date_from_rfc2822(lastmod)
 
         if data.feed.has_key('lastbuilddate'):
-            stamp['modified'] = stamp['rebuilt'] = date_from_rfc2822(lastmod)
+            stamp['modified'] = stamp['rebuilt'] = date_from_rfc2822(data.feed.lastbuilddate)
 
         if len(data.entries) > 0:
-            # print "0th: %s" % data.entries[0]
             if data.entries[0].has_key("updated_parsed"):
                 stamp['modified'] = int(time.mktime(data.entries[0].updated_parsed))
                 if not stamp.has_key('rebuilt'):
@@ -95,6 +95,7 @@ def feed_modified(url, lastmod = 0, etag = None):
         return stamp
     
     except Exception, e:
+        print "feed parsing failed: %s" % e
         return {}
 
 def feed_detect(url):
@@ -202,3 +203,13 @@ def generate_password(length = 10):
     chars = string.letters + string.digits
     password = "".join([ random.choice(chars) for n in range(length) ])
     return password
+
+def recommendations_for_user(db, user_id = 1):
+    users = db.execute('select user_id, 1.0 * count(*) / max as score from bookmark, (select feed_id, (select count(*) as max from bookmark where user_id = ?) as max from bookmark where user_id = ? group by feed_id) as myfeeds where bookmark.feed_id = myfeeds.feed_id group by user_id having score > 0.02 order by score desc limit 3', [ user_id, user_id ])
+
+    if users:
+        user_ids = ", ".join(map(lambda n: str(n["user_id"]), users))
+        feeds = db.execute('select bookmark.feed_id, bookmark.title as title, sum(myfeeds.feed_id == bookmark.feed_id) as ex from bookmark, (select feed_id from bookmark where user_id = ?) as myfeeds where user_id in (' + user_ids + ') group by bookmark.feed_id having ex = 0 order by random() limit 5', [ user_id ])
+        return feeds
+    else:
+        return []

@@ -10,8 +10,21 @@
 	rather than presenting you with the most recent content from the sites that you follow, it simply lets you know
 	when they have been updated. you can then read the content of these sites as it is intended: on the site itself.
 	</p>
+	<h3>shortcuts and helpers</h3>
 	<p>
-	<a href="javascript:location.href='http://www.ideoforms.com/pysoso/bookmark/lookup/?url='+encodeURIComponent(window.location.href)">bookmark</a>
+	pysoso supports a number of keyboard shortcuts to speed up common tasks. these include:
+	</p>
+	<ul>
+		<li><strong><u>e</u></strong>: toggle editing on/off</li>
+		<li><strong><u>c</u></strong>: hide/show controls</li>
+		<li><strong><u>f</u></strong>: hide/show fresh bookmarks</li>
+		<li><strong><u>s</u></strong>: hide/show stalebookmarks</li>
+	</ul>
+	<h3>bookmarklet</h3>
+	<p>
+	to simplify adding pysoso feeds from your browser, drag the below link to your bookmarks toolbar:
+	<a href="javascript:location.href='{{ url_for("bookmark_lookup", _external = True) }}?url='+encodeURIComponent(window.location.href)">bookmark</a>
+	</p>
 </div>
 
 {% endblock %}

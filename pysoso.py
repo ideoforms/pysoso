@@ -129,6 +129,8 @@ def before_request():
     up the current user so that we know he's there.
     """
     g.db = connect_db()
+    g.db.row_factory = sqlite3.Row
+
     g.user = None
     if 'user_id' in session:
         g.user = query_db('select * from user where user_id = ?',
@@ -212,6 +214,7 @@ def bookmark_lookup():
         return render_template('bookmark/add.html', error = "Sorry, I couldn't find an RSS feed for the URL <a href='%s'>%s</a>. Please verify that one exists." % (url, url))
 
     stamp = psutil.feed_modified(feed)
+    print "stamp %s" % stamp
     if url == feed:
         url = stamp['link']
 
@@ -435,6 +438,15 @@ def lost():
 
         flash("a new password has been sent out. it should be with you within a few minutes.")
         return render_template("lost.html")
+
+@app.route('/recommend')
+def recommend():
+    """Recommended feeds"""
+    if 'user_id' not in session:
+        abort(401)
+
+    feeds = psutil.recommendations_for_user(g.db, session["user_id"])
+    return render_template('recommend.html', feeds = feeds)
 
 @app.route('/about')
 def about():
