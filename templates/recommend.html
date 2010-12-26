@@ -4,14 +4,19 @@
 
 <div class="body">
 	<h2>Recommended Feeds</h2>
-	<p>
-	based on your bookmarks, you might also like:
-	</p>
-	<ul>
-	{% for feed in feeds %}
-		<li><a href="{{ feed.url }}">{{ feed.title }}</a></li>
-	{% endfor %}
-	</ul>
+	{% if feeds %}
+		<p>
+		based on your bookmarks, you might also like:
+		</p>
+		<ul>
+		{% for feed in feeds %}
+			<li><a href="{{ feed.url }}">{{ feed.title }}</a></li>
+		{% endfor %}
+		</ul>
+	{% else %}
+		<p>
+		Sorry, I couldn't find any feed recommendations. Please <a href="{{ url_for("bookmark_lookup") }}">add some more bookmarks</a> and then try again.
+	{% endif %}
 </div>
 
 {% endblock %}

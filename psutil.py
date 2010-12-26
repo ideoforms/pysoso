@@ -205,11 +205,16 @@ def generate_password(length = 10):
     return password
 
 def recommendations_for_user(db, user_id = 1):
+    """generate feed recommendations based on a user-to-user similarity matrix.
+       similarity score represents the fraction of bookmarks that user A shares
+       with user B. the closest 3 users are selected, and new bookmarks picked
+       at random."""
+
     users = db.execute('select user_id, 1.0 * count(*) / max as score from bookmark, (select feed_id, (select count(*) as max from bookmark where user_id = ?) as max from bookmark where user_id = ? group by feed_id) as myfeeds where bookmark.feed_id = myfeeds.feed_id group by user_id having score > 0.02 order by score desc limit 3', [ user_id, user_id ])
 
     if users:
         user_ids = ", ".join(map(lambda n: str(n["user_id"]), users))
-        feeds = db.execute('select bookmark.feed_id, bookmark.title as title, sum(myfeeds.feed_id == bookmark.feed_id) as ex from bookmark, (select feed_id from bookmark where user_id = ?) as myfeeds where user_id in (' + user_ids + ') group by bookmark.feed_id having ex = 0 order by random() limit 5', [ user_id ])
+        feeds = db.execute('select feed.*, bookmark.feed_id, bookmark.title as title, sum(myfeeds.feed_id == bookmark.feed_id) as ex from bookmark, feed, (select feed_id from bookmark where user_id = ?) as myfeeds where user_id in (' + user_ids + ') and feed.feed_id = bookmark.feed_id group by bookmark.feed_id having ex = 0 order by random() limit 5', [ user_id ])
         return feeds
     else:
         return []

@@ -12,8 +12,9 @@
 """
 from __future__ import with_statement
 import time
-
+import settings
 import psutil
+
 import werkzeug
 import urlparse
 import sys
@@ -28,19 +29,8 @@ from flask import Flask, request, session, url_for, redirect, \
      render_template, abort, g, flash, jsonify, make_response
 from werkzeug import check_password_hash, generate_password_hash
 
-
-# configuration
-# DATABASE = 'pysoso.db'
-# DATABASE = '/var/www/vhosts/ideoforms.com/apps/pysoso/pysoso.db'
-# DATABASE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "pysoso.db")
-# DATABASE = '/var/www/vhosts/ideoforms.com/apps/pysoso/pysoso.db'
-DATABASE = '/var/www/vhosts/ideoforms.com/apps/pysoso-dev/pysoso.db'
-PER_PAGE = 30
-DEBUG = True
-SECRET_KEY = 'development key'
-
 app = Flask(__name__)
-app.config.from_object(__name__)
+app.config.from_object('settings')
 
 def connect_db():
     """Returns a new connection to the database."""
@@ -211,7 +201,7 @@ def bookmark_lookup():
     feed = psutil.feed_detect(url)
 
     if not feed:
-        return render_template('bookmark/add.html', error = "Sorry, I couldn't find an RSS feed for the URL <a href='%s'>%s</a>. Please verify that one exists." % (url, url))
+        return render_template('bookmark/add.html', error = "Sorry, I couldn't find an RSS feed for the URL <a href='%s'>%s</a>. Please verify that one exists. If you can find an RSS feed manually, try entering the feed URL directly." % (url, url))
 
     stamp = psutil.feed_modified(feed)
     print "stamp %s" % stamp
