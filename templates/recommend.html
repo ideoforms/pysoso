@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block title %}Recommendations{% endblock %}
+{% block body %}
+
+<div class="body">
+	<h2>Recommended Feeds</h2>
+	<p>
+	based on your bookmarks, you might also like:
+	</p>
+	<ul>
+	{% for feed in feeds %}
+		<li><a href="{{ feed.url }}">{{ feed.title }}</a></li>
+	{% endfor %}
+	</ul>
+</div>
+
+{% endblock %}
