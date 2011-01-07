@@ -61,7 +61,7 @@ def feed_modified(url, lastmod = 0, etag = None):
     
     try:
         stamp = {}
-        response = urllib2.urlopen(req)
+        response = urllib2.urlopen(req, timeout = 10)
         headers = response.info()
         
         if 'xml' not in response.info()['content-type']:
