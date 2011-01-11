@@ -3,17 +3,11 @@
 {% block body %}
 
 <div class="body">
-	<h2>Add Bookmark</h2>
+	<h2><a name="bookmark_add"></a>Add Bookmark</h2>
 	<p>
 	Enter the address of a website that you would like to add to your bookmark list. Only websites which provide an RSS feed are supported.
 	</p>
-	<form action="{{ url_for('bookmark_lookup') }}" method="post">
-		<dl>
-			<dt>URL:
-			<dd><input type="text" name="url" size="50" />
-		</dl>
-		<div class="submit"><input type="submit" value="Look up"></div>
-	</form>
+	{% include "bookmark/form.html" %}
 </div>
 
 {% endblock %}

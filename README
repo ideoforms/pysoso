@@ -1,0 +1,23 @@
+README
+------------------------------------------------------------------------
+pysoso is a lightweight RSS feed reader, written in flask.
+it mirrors the functionality provided by rososo.
+
+
+INSTALLATION
+------------------------------------------------------------------------
+to install pysoso:
+
+  1. run a python interpreter (2.6+) from the pysoso directory.
+     execute the following commands to create the sqlite3 db:
+
+       import pysoso
+       pysoso.init_db()
+
+  2. edit settings.py to point to the full path of your db file.
+     edit $SCRIPT_ROOT in static/pysoso.js to point to the top-level
+     URL that your application will reside within.
+
+  3. run 'python pysoso.py' to start the server.
+     alternatively, edit pysoso.wsgi and configure your webserver to
+     use this WSGI file as detailed in the Flask documentation.

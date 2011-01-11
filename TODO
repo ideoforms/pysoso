@@ -1,0 +1,19 @@
+FEATURE ROADMAP
+------------------------------------------------------------------------
+
+ - ALERT SYSTEM
+   to notify users of events (import completed, etc)
+
+ - MORE EFFICIENT IMPORTER
+   should really schedule & run asynchronously
+
+ - UNIT TESTS
+
+ - SOCIAL ELEMENTS
+   sharing lists.
+
+ - MORE USER SETTINGS
+    - public/private
+    - change password
+
+------------------------------------------------------------------------

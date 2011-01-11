@@ -10,7 +10,7 @@
     :copyright: (c) 2010 by daniel jones
     :license: BSD, see LICENSE for more details.
 """
-from __future__ import with_statement
+# from __future__ import with_statement
 import time
 import settings
 import psutil

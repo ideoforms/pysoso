@@ -1,24 +1,28 @@
-$SCRIPT_ROOT = "/pysoso";
+$SCRIPT_ROOT = "";
 
 $(function()
 {
-	$('a#calculate').bind('click', function() {
-		$.getJSON($SCRIPT_ROOT + '/_add_numbers', {
-			a: $('input[name="a"]').val(),
-			b: $('input[name="b"]').val()
-		}, function(data) {
-			$("#result").text(data.result);
-		});
-		return false;
-	});
-
 	$('html').keypress(function(event)
 	{
 		if (event.target.tagName == "INPUT")
 			return;
 
+		// a: goto "add bookmark"
+		if (event.which == 97)
+		{
+			got_url = $('#bookmark_url').length;
+			if (got_url)
+			{
+				document.location.href = '#bookmark_add';
+				$('#bookmark_url').focus();
+			}
+			else {
+				document.location.href = $SCRIPT_ROOT + "/bookmark/lookup";
+			}
+		}
+
 		// c: show/hide controls
-  		if (event.which == 99)
+  		else if (event.which == 99)
 			$('#controls .bookmarks_show').click();
 
 		// e: toggle editing
