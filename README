@@ -21,3 +21,8 @@ to install pysoso:
   3. run 'python pysoso.py' to start the server.
      alternatively, edit pysoso.wsgi and configure your webserver to
      use this WSGI file as detailed in the Flask documentation.
+
+  4. to update the feeds database, you'll need to schedule the script
+     bin/feed-update-all.py to execute regularly. first time, try running
+     it manually; your feeds' last-modified times should update accordingly.
+     when adding a crontab entry, use the '-q' flag for silent operation.
