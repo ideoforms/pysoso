@@ -3,6 +3,15 @@ README
 pysoso is a lightweight RSS feed reader, written in flask.
 it mirrors the functionality provided by rososo.
 
+REQUIREMENTS
+------------------------------------------------------------------------
+pysoso requires:
+  - python 2.6
+  - flask (http://flask.pocoo.org/)
+    tested with version 0.6.1
+  - lxml
+  - BeautifulSoup
+  - feedparser
 
 INSTALLATION
 ------------------------------------------------------------------------
