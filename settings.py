@@ -1,4 +1,4 @@
 DATABASE = '/var/www/vhosts/ideoforms.com/apps/pysoso-dev/pysoso.db'
-DEBUG = True
+DEBUG = False
 SECRET_KEY = 'development key'
 
