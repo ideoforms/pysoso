@@ -5,7 +5,7 @@
 <div class="body">
 	<h2>About</h2>
 	<p>pysoso is a lightweight RSS feed reader, written in <a href="http://flask.pocoo.org/">flask</a>.<br />
-	it mirrors the functionality provided by <a href="http://www.rososo.com/">rososo</a>.</p>
+	it mirrors the functionality provided by <a href="http://www.rososo.com/">rososo</a>.
 	<p>
 	rather than presenting you with the most recent content from the sites that you follow, it simply lets you know
 	when they have been updated. you can then read the content of these sites as it is intended: on the site itself.
@@ -26,6 +26,10 @@
 	<p>
 	to simplify adding feeds to pysoso from your browser, drag the below link to your bookmarks toolbar:
 	<a href="javascript:location.href='{{ url_for("bookmark_lookup", _external = True) }}?url='+encodeURIComponent(window.location.href)">bookmark</a>
+	</p>
+	<h3>source code</h3>
+	<p>
+	the source code for pysoso is <a href="https://github.com/ideoforms/pysoso">freely available from github</a>.
 	</p>
 </div>
 
