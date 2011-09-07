@@ -10,16 +10,23 @@
 	:copyright: (c) 2010-2011 daniel jones
 	:license: BSD, see LICENSE for more details.
 """
-# from __future__ import with_statement
+
+import os
+import re
+import sys
 import time
-import settings
-import psutil
+import locale
+
+# if we pick up a default locale of ISO8859-1, we may end up with
+# 8-byte ASCII characters in our password salts :-(
+# (this is a known bug in flask/werzkreug, to be fixed in next version)
+locale.setlocale(locale.LC_ALL, ('en_US', 'UTF8'))
 
 import werkzeug
 import urlparse
-import sys
-import os
-import re
+import settings
+
+import psutil
 
 from sqlite3 import dbapi2 as sqlite3
 from hashlib import md5
@@ -123,7 +130,8 @@ def before_request():
 	g.db.row_factory = sqlite3.Row
 
 	# needed to handle unicode correctly
-	g.db.text_factory = str
+	# g.db.text_factory = lambda x: unicode(x, "utf-8", "ignore")
+	# g.db.text_factory = str
 
 	g.user = None
 	if 'user_id' in session:
@@ -391,6 +399,10 @@ def register():
 			error = 'The username is already taken'
 		else:
 			c = g.db.cursor()
+			password = request.form['password'].encode()
+		
+			hash = generate_password_hash(request.form['password'])
+			
 			c.execute('''insert into user (
 				username, email, pw_hash) values (?, ?, ?)''',
 				[request.form['username'], request.form['email'],
